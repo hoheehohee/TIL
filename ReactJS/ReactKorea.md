@@ -1,7 +1,9 @@
-## 코딩 컨벤션을 자동하 할 수 있는
+## React Korea & JSDev.KR The 2nd Meetup
+### 코딩 컨벤션을 자동하 할 수 있는
 
-자동화 도구 :
 
+#### 자동화 도구 :
+```
 1. EditorConfig : 에디터 설정을 자동화 할 때
   - .editorconfig 파일 설정을 할 수 있다.
   - 문자셋, 탭/스페이스, 스페이스 갯수, 줄마꿈문서, 파일 끝 빈 줄등
@@ -24,9 +26,9 @@
 4. Husky + Lint-staged
   - Husky : git hook을 편하게 작성
   - Lint-staged : 커밋할 파일에 릿트 설정
-
-
-React  퍼포먼스 개선기
+```
+#### React  퍼포먼스 개선기
+```
 
 장점
  - 러닝커드?
@@ -42,9 +44,9 @@ React  퍼포먼스 개선기
   : 다음 state와 props를 현재 state와 props와 자동으로 비교
     단 shallowCompare이기 때문에 구현할때 잘 생각
 
+```
+
+#### Reqct TDD 쵸큼 맛보기
 
 
-Reqct TDD 쵸큼 맛보기
-  - enzyme
-
-React 애플리케이션 아키텍처 - (부제: 아무도 알려주지 않아서 혼자 삽질했다.)
+#### React 애플리케이션 아키텍처 - (부제: 아무도 알려주지 않아서 혼자 삽질했다.)
