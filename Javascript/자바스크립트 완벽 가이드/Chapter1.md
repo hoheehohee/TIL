@@ -4,6 +4,7 @@
   - <pre><code>first-class function : 함수의 인자나 함수의 반환 값으로 또 다른 함수를 사용할 수 있다는 개념</code></pre>
 
 ## 자바스크립트 코어
+
   - 자바스크립트에는 객체와 배열이라는 두 가지 중요한 타입이 있다.
   - <pre><code>var book ={                  //객체는 중괄호로 둘러싸여 있다.
       topic : "Javascript",
