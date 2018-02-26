@@ -85,126 +85,126 @@
   import Footer from './Footer';
   ```
 - **Props Naming**: 다른 목적으로 DOM component props 이름을 사용하지 않습니다.
-> 앱의 히위 집합에서 API를 다양하게 사용하면 코드의 읽기가 쉽지 않고 관리가 어려워 버그가 발생할 수 있습니다.
-```jsx
-// bad
-<MyComponent style="fancy" />
+  > 앱의 히위 집합에서 API를 다양하게 사용하면 코드의 읽기가 쉽지 않고 관리가 어려워 버그가 발생할 수 있습니다.
+  ```jsx
+  // bad
+  <MyComponent style="fancy" />
 
-// bad
-<MyComponent className="fancy" />
+  // bad
+  <MyComponent className="fancy" />
 
-//good
-<MyComponent variant="fancy" />
-```
+  //good
+  <MyComponent variant="fancy" />
+  ```
 
 ## 선언(Declaration)
 - displayName을 이용하여 컴포넌트명을 정하지 않습니다. 그대신, 참조에 의해 이름을 지정합니다.
-```jsx
-// bad
-export default React.createClass({
-  displayName: 'ReservationCard',
-});
+  ```jsx
+  // bad
+  export default React.createClass({
+    displayName: 'ReservationCard',
+  });
 
-// good
-export default class ReservationCard extends React.Component {
-}
-```
+  // good
+  export default class ReservationCard extends React.Component {
+  }
+  ```
 
 ##조정(Aligment)
 - JSX 구문에 따른 정렬 스타일을 사용합니다. eslint: [`react/jsx-closing-bracket-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-bracket-location.md) [`react/jsx-closing-tag-location`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-closing-tag-location.md)
 
-```jsx
-<Foo superLongParam="bar"
-         anotherSuperLongParam="baz" />
+  ```jsx
+  <Foo superLongParam="bar"
+           anotherSuperLongParam="baz" />
 
-// good
-<Foo
-  superLongParam="bar"
-  anotherSuperLongParam="baz"
-/>
+  // good
+  <Foo
+    superLongParam="bar"
+    anotherSuperLongParam="baz"
+  />
 
-// props가 한 줄에 들어간다면 같은 줄에 정렬 하십시오.
-<Foo bar="bar" />
+  // props가 한 줄에 들어간다면 같은 줄에 정렬 하십시오.
+  <Foo bar="bar" />
 
-// children는 들여쓰기는 합니다.
-<Foo
-  superLongParam="bar"
-  anotherSuperLongParam="baz"
->
-  <Quux />
-</Foo>
-```
+  // children는 들여쓰기는 합니다.
+  <Foo
+    superLongParam="bar"
+    anotherSuperLongParam="baz"
+  >
+    <Quux />
+  </Foo>
+  ```
 
 ## 인용(Quotes)
 - JSX 속성(attributes)에는 항상 큰 따옴표(")를 사용합니다. 그러나 다른 모든 자바스크립트에는 작은 따옴표(single quotes)를 사용합니다.
->JSX 속성(attributes)은 따옴표(quotes)의 탈출(escaped)을 포함할 수 없습니다. 그래서 큰 따옴표를 이용하여 "don't"와 같은 접속사를 쉽게 입력할 수 있습니다. 일반적으로 HTML 속성(attributes)에는 작은 따옴표 대신 큰 따옴표를 사용합니다. 그래서 JSX 속성역시 동일한 규칙이 적용됩니다.
+  >JSX 속성(attributes)은 따옴표(quotes)의 탈출(escaped)을 포함할 수 없습니다. 그래서 큰 따옴표를 이용하여 "don't"와 같은 접속사를 쉽게 입력할 수 있습니다. 일반적으로 HTML 속성(attributes)에는 작은 따옴표 대신 큰 따옴표를 사용합니다. 그래서 JSX 속성역시 동일한 규칙이 적용됩니다.
 
-```jsx
-// bad
-<Foo bar='bar' />
+  ```jsx
+  // bad
+  <Foo bar='bar' />
 
-// good
-<Foo bar="bar" />
+  // good
+  <Foo bar="bar" />
 
-// bad
-<Foo style={{ left: "20px" }} />
+  // bad
+  <Foo style={{ left: "20px" }} />
 
-// good
-<Foo style={{ left: '20px' }} />
-```
+  // good
+  <Foo style={{ left: '20px' }} />
+  ```
 
 ## 공백(Spacing)
 - 자신을 닫는(self-closing) 태그에는 항상 하나의 공백만을 사용합니다. eslint: [`no-multi-spaces`](https://eslint.org/docs/rules/no-multi-spaces), [`react/jsx-tag-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-tag-spacing.md)
-```jsx
-// bad
-<Foo/>
+  ```jsx
+  // bad
+  <Foo/>
 
-// very bad
-<Foo                 />
+  // very bad
+  <Foo                 />
 
-// bad
-<Foo
- />
+  // bad
+  <Foo
+   />
 
-// good
-<Foo />
-```
+  // good
+  <Foo />
+  ```
 - JSX 중괄호에 공백을 넣지 마십시오. eslint: [`react/jsx-curly-spacing`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-curly-spacing.md)
-```jsx
-// bad
-<Foo bar={ baz } />
+  ```jsx
+  // bad
+  <Foo bar={ baz } />
 
-// good
-<Foo bar={baz} />
-```
+  // good
+  <Foo bar={baz} />
+  ```
 ## 속성(Props)
 - prop 이름은 항상 camelCase(소문자로 시작)를 사용합니다.
-```jsx
-// bad
-<Foo
-  UserName="hello"
-  phone_number={12345678}
-/>
+  ```jsx
+  // bad
+  <Foo
+    UserName="hello"
+    phone_number={12345678}
+  />
 
-// good
-<Foo
-  userName="hello"
-  phoneNumber={12345678}
-/>
-```
+  // good
+  <Foo
+    userName="hello"
+    phoneNumber={12345678}
+  />
+  ```
 
 - 명시적으로 true 값을 가지는 prop은 그 값을 생략할 수 있습니다. eslint: [`react/jsx-boolean-value`](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md)
-```jsx
-// bad
-<Foo
-  hidden={true}
-/>
+  ```jsx
+  // bad
+  <Foo
+    hidden={true}
+  />
 
-// good
-<Foo
-  hidden
-/>
+  // good
+  <Foo
+    hidden
+  />
 
-// good
-<Foo hidden />
-```
+  // good
+  <Foo hidden />
+  ```
