@@ -84,3 +84,4 @@
   // good
   import Footer from './Footer';
   ```
+- **Props Naming**
