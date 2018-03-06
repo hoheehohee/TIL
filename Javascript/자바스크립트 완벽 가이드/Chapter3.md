@@ -147,3 +147,42 @@
     a[0]          // => 1: 변수 a를 통해서도 바뀐 점을 볼 수 있다.
     a === b       // => true; 변수 a와 b는 한 객체를 참조하기 때문에 같다.
     ```
+## 타입 변환(3.8)
+ - 자바스크립트는 타입에 대해 매우 유연하다.
+   ```javascript
+   10 + ' objects'      // => "10 objects". 숫자 10은 문자열로 변환된다.
+   '7' * '4'            // => 28: 두 문자열은 숫자로 변환한다.
+   var n = 1 - 'x';     // => NaN: 문자열 "x"는 숫자로 변환할 수 없다.
+   n + ' objects';      // => "NaN objects": NaN은 문자열 "NaN"으로 변환된다.
+   ```
+ - 자바스크립트 타입 변환
+
+   | 값  | String | Number | Boolean | Object
+   |:-------- | -------- | -------- | -------- | -------- |
+   | undefined | "undefined" | NaN | false | TypeError 예외 발생 |
+   | null | null | 0 | false| Type Error 예외 발생 |
+   | true | "true" | 1 || new Boolean(true)|
+   | false | "false" | 0 || new Boolean(false)|
+   | ""(빈 문자열) || 0 | false | new String("")|
+   | "1.2"(숫자 문자열) || 1.2 | true | new String("1.2")|
+   | "one"(문자열) || NaN| true| new String("one")|
+   | 0 | "0" || false | new Number(0) |
+   | -0 | "0" || false | new Number(-0) |
+   | NaN | "NaN" || false | new Number(NaN) |
+   | Infinity | "Infinity" || true | new Number(Infinity) |
+   | -Infinity | "-Infinity" || true | new Number(-Infinity) |
+   | 1(0이 아닌 유한한 값) | "1" || true | new Number(1) |
+   | {}(객체) | (3.8.3참고) | (3.8.3참고) | true ||
+   | [ ] (배열) | "" | 0 | true ||
+   | [9] (배열의 원소가 1개이고, 값이 숫자일 경우)| "9" | 9 | true ||
+   | ['a'] (배열) | (join() 메소드를 사용할 것) | NaN| true ||
+   | function(){} (함수) | (3.8.3 참고) | NaN | true ||
+
+## 변환과 동치(3.8.1)
+ - 동치 연산자 ==도 유연하게 동작한다.
+   ```javascript
+   numm == undefined   // true
+   "0" == 0            // 비교하기 전에 숫자로 변환한다.
+   0 == false          // 불리언은 비교하기 전에 숫자로 변환한다.
+   "0" == false        // 두 피연산자는 비교하기 전에 숫자로 변환한다.
+   ```
