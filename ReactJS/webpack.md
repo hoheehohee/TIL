@@ -1,13 +1,11 @@
 # webpack-dev-server (개발모드)
 ## hot vs inline webpack-dev-server options
------
  - inline: 전체 페이지에 대한 실시간 리로딩("Live Reloading") 옵션
  - hot: 컴포넌트가 수정 될 경우 그 수정된 부분만 리로드 해주는 부분 모듈 리로딩("Hot Module Reloading") 옵션
  - 만약 두개 옵션을 모두 지정할 경우 "Hot Module Reloading"이 처음 발생한고. 그리고 "Hot Module Reloading"이 안되면 전체 페이지를 리로딩한다.
 
 
 ## "entry" [String Vs Array Vs Object]
------
  - **entry** 는 root모듈 또는 시작 지점이 무엇인지 Webpack에게 알려 준다.
  - **entry** 는 String, Array, Object 형태로 될 수 있다.
 
