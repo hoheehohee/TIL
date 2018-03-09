@@ -71,6 +71,7 @@
 - **output** 은 어디, 그리고 어떻게  결과 파일이 저장되는지에 대한 것이다. **output** 은 'path'와 'publicPath' 2가지 속성이 있어서 매우 헷갈린다.
   - path: 어디에 결과가 저장되는지 에 관한 것
   - publicPath: 배포 빌드 할 때 Webpack plugins(url-loader, file-loader 같은...), CSS나 HTML파일 안에 URL들을 업데이트 해주기 위한 것(prefix개념)
+  - pathinfo: 배포 빌드 할 때 주석을 포함 하도록 한다.(boolean)
 - 예를 들어, CSS에서 localhost에 `./test.png`를 로드 할 수 있는 URL이 있을수 있다. 하지만 production인 경우 `test.png`는 [`CDN`](https://ko.wikipedia.org/wiki/%EC%BD%98%ED%85%90%EC%B8%A0_%EC%A0%84%EC%86%A1_%EB%84%A4%ED%8A%B8%EC%9B%8C%ED%81%AC)이나 다른 지정된 경로로 실행 중 일 수 있다.
 수동으로 수정하지 않고 Webpack 'publicPath'를 사용하면 수많은 플러그인과 다수의 CSS, HTML파일안에 URL들을 자동으로 업데이트 해준다.
   ```CSS
@@ -318,3 +319,33 @@
   }
 }
 ```
+
+## [Externals](https://webpack.js.org/configuration/externals/#src/components/Sidebar/Sidebar.jsx)
+- 지정된 모듈이 번들링하지 않고 그 모듈이 어떤 형식으로 노출 되는지 설정할 수 있게 한다.
+즉 webpack 으로 묶지 않으며 library중에 밖으로 노출시킬 녀석을 설정하면 된다.
+- 설정은 string, array, object, function, regex
+
+## [Resolve](https://webpack.js.org/configuration/resolve/#resolve-modules)
+> 모듈을 해석하는데 있어 영향을 미치는 옵션을 설정
+
+- alias
+  - 특정 모듈을 보다 쉽게 가져 오거나 요구하도록 별칭을 만든다.
+  ```javascript
+  // webpack.config.js
+  {
+    ...
+    resolve: {
+      alias: {
+        Utilities: path.resolve(__dirname, 'src/utilities/'),
+        Templates: path.resolve(__dirname, 'src/templates/')
+      }
+    }
+    ...
+
+    // 다음과 같이 가져올 때 상대 경로를 사용하는 대신
+    import Utility from '../../utilities/utility';
+
+    // 별칭을 사용할 수 있다.
+    import Utility from 'Utilities/utility';
+  }
+  ```
