@@ -308,18 +308,6 @@
 그리고 **Plugins** 은 bundle 이나 chunk 레벨 그리고 bundle이 생성 된 후에 작동 한다.
 **commonsChunksPlugins** 와 같은 일부 플러그인은 번들 자체가 어떻게 생성되는지 수정한다.
 
-## Resolving File Extensions
-- 대부분 **Webpack** 설정 파일은 아래와 같이 빈 string을 포함한 **resolve extensions** 라는 속성을 가지고 있다.
-빈 string 은 `require(./myFile)` 과 같이 빈 확장자를 import하게 도와주는 역할이다.
-
-```javascript
-{
-  resolve: {
-    extensions: ['', '.js', ',jsx']
-  }
-}
-```
-
 ## [Externals](https://webpack.js.org/configuration/externals/#src/components/Sidebar/Sidebar.jsx)
 - 지정된 모듈이 번들링하지 않고 그 모듈이 어떤 형식으로 노출 되는지 설정할 수 있게 한다.
 즉 webpack 으로 묶지 않으며 library중에 밖으로 노출시킬 녀석을 설정하면 된다.
@@ -327,6 +315,27 @@
 
 ## [Resolve](https://webpack.js.org/configuration/resolve/#resolve-modules)
 > 모듈을 해석하는데 있어 영향을 미치는 옵션을 설정
+
+- [modules](https://webpack.js.org/configuration/resolve/#resolve-modules)
+  - webpack이 모듈을 해설 할 때 검색 해야 할 규칙 모듈 설정
+  - 절대 경로와 상대 경로를 모두 사용 할 수 있지만 조금 다르게 동작한다.
+    - 상대 경로: node가 node_modules를 검색하는 방법과 마찬가지로 현재 디렉토리뿐만 아리나 조상 디렉토리까지 검색하여 스캔 된다.
+    - 절대 경로: 지정된 디렉토리에서만 검색 한다.
+
+- [extensions](https://webpack.js.org/guides/migrating/#resolve-extensions)
+  - 대부분 **Webpack** 설정 파일은 아래와 같이 빈 string을 포함한 **resolve extensions** 라는 속성을 가지고 있다.
+  빈 string 은 `require(./myFile)` 과 같이 빈 확장자를 import하게 도와주는 역할이다.
+
+  ```javascript
+  {
+    resolve: {
+      extensions: ['', '.js', ',jsx']
+    }
+  }
+  ```
+
+- [plugins](https://webpack.js.org/configuration/resolve/#resolve-plugins)
+  - 적용해야하는 추가 플러그인 목록
 
 - alias
   - 특정 모듈을 보다 쉽게 가져 오거나 요구하도록 별칭을 만든다.
@@ -349,3 +358,14 @@
     import Utility from 'Utilities/utility';
   }
   ```
+
+## module
+> 일반 모듈에 영향을 주는 옵션
+
+- [strictExportPresence](https://webpack.js.org/configuration/module/#module-contexts): true일 경우 ES6 exports 누락 시 warning이 아닌 error를 발생
+- [rules](https://webpack.js.org/configuration/module/#module-rules): 모듈을 생성 될 때의 규칙
+  - test: lodaer를 적용할 조건
+  - exclude: loader 적용을 제외할 조건
+  - include: 가저온 파일이 로더에 의해 변환될 경로 또는 파일의 배열
+  - loader: !문자열의 분리형 로더
+  - loaders: 문자열 로더의 배열
