@@ -325,7 +325,7 @@
 - [extensions](https://webpack.js.org/guides/migrating/#resolve-extensions)
   - 대부분 **Webpack** 설정 파일은 아래와 같이 빈 string을 포함한 **resolve extensions** 라는 속성을 가지고 있다.
   빈 string 은 `require(./myFile)` 과 같이 빈 확장자를 import하게 도와주는 역할이다.
-
+  
   ```javascript
   {
     resolve: {
