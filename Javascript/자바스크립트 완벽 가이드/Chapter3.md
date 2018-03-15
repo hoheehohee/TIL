@@ -186,3 +186,34 @@
    0 == false          // 불리언은 비교하기 전에 숫자로 변환한다.
    "0" == false        // 두 피연산자는 비교하기 전에 숫자로 변환한다.
    ```
+## 명시적 변화(3.8.2)
+- 자바스크립트는 많은 형 변환을 자동으로 수행하지만, 명지적 변환이 필요한 때가 있다.
+- Boolean(), Number(), String(), Object()
+  ```javascript
+  Number("3")         // => 3
+  String("false")     // => "false" false.toString()도 마찬가지다.
+  Boolean([ ])        // => true
+  Object(3)           // => new Number(3)
+
+  x + ""              // String(x)와 같다
+  +x                  // Number(x)와 같다. 결과는 x-0이다.
+  !!x                 // Boolean(x)과 같다. 두 개의 !를 주목하라
+  ```
+## 객체에서 원시 타입의 변환(3.8.3)
+- 모든 객체(배열과 함수를 포함한)는 true로 변환된다.
+- new Boolean(false)는 원시 타입이 아니라 객체이므로 true로 변환 된다.
+- 모든 객체는 두 개의 타입 변환 메서드를 상속한다.
+  - `toString()`: 객체를 문자열로 표현하여 반환한다.
+    ```javascript
+    ({x: 1, y: 2}).toString()           // => "[object object]"
+    [1,2,3].toString()                  // => "1,2,3"
+    (function(x) { f(x); }).toString()  // => "function(x) {\n f(x); \n}"
+    /\d+\g.toString()                   // => "/\\d+/g"
+    new Date(2010,0,1).toString()       // => "Fri Jan 01 2010 00:00:00 GMT-0800 (PST)"
+    ```
+  - `valueOf()`: 하는 일은 잘 정의되어 있지 않다.
+  월래 이 함수는 객체를 잘 표현하는 원시 타입을 반환해야 한다. 그런데 객체는 결합된 값(compound value)이고 대부분의 객체는 원시타입 값으로 표현할 수 없기 때문에, **기본적으로 valueOf() 메소드는 원시 타입을 받환하지 않고 단순히 객체 그 자신을 반환한다.**
+    ```javascript
+    var d = new Date(2010, 1, 1);   // 2010년 1월 1일
+    d.valueOf()                     // => 1262332800000
+    ```
