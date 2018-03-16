@@ -217,3 +217,73 @@
     var d = new Date(2010, 1, 1);   // 2010년 1월 1일
     d.valueOf()                     // => 1262332800000
     ```
+
+## 변수 선언(3.9)
+- 변수를 사용하기 전에 변수 선언을 해야 한다.
+  ```javascript
+  var i;
+  var sum;
+  var i, sum;
+  var message = 'hello';
+  ```
+- var문에서 변수에 초기 값을 지정하지 않는다면, 변수는 값이 설정될 때까지 undefined 값을 갖게 된다.
+
+## 변수의 유효범위
+- 어떤 변수가 정의되어 있는 영역을 말한다.
+- 전역 변수(global variable): 코드 전체에 걸쳐 정의되어 있는 변수
+- 지역 변수(local variable): 어떤 함수 안에서 선언된 변수는 오직 해당 함수 몸체 안에서만 정의 된다.
+  ```javascript
+  var scope = 'global';         // 전역 변수를 선언한다.
+  function checkscope() {
+    var scope = 'local';        // 전역 변수와 같은 이름으로 지역 변수를 선언한다.
+    return scope;               // 전역 변수가 아닌 지역 변수를 반환한다.
+  }
+
+  checkscope();                 // => 'local'
+
+  ///////////////////////////////////////////////////////////////////////
+
+  var scropt = 'glocal scope';          // 전역 변수
+
+  function checkscope()  {
+    var scope = 'local scope';          // 지역 변수
+    function nested() {
+      var scope = 'nested scope';       // 함수 안에 포함된 유혀범위의 지역 변수
+      return scope;                     // nested() 안의 변수를 반환한다.
+    }
+
+    return nested();
+  }
+
+  checkscope();                         // => 'nested scope';
+  ```
+
+## 함수 유효범위와 끌어올림(hoising)
+- 자바스트립트는 함수 유효밤위를 사용한다.
+- 변수는 해당 변수가 정의된 함수 안에서 보일 뿐 아니라, 그 함수 안에 중첩된 함수 안에서도 보인다.
+  ```javascript
+  function test(o) {
+    var i = 0;                            // i는 함수 전체에 걸쳐 정의 된다.
+    if (type o == 'object') {
+      var j = 0;                          // j는 블록뿐만 아니라 함수 전체에 걸쳐 정의된다.
+
+      for(var k=0; k < 10; k++) {         // k는 반복문 외에도 함수 전체에 걸쳐 정의 된다.
+          console.log(k);                 // 숫자 0부터 9까지 출력한다.
+      }
+      console.log(k);                     // => 10; k는 여전히 정의되어 있다.
+    }
+    console.log(j);                       // j는 정의되어 있고 조기회되어 있지 않을 것이다.
+  }
+  ```
+- 함수 유효범위(funcion scope)는, 어떤 함수 안에서 선언된 모든 변수는 그 함수 전체에 걸쳐 유효하다.
+- 자바스크립트 코드는 함수 안에 있는 모든 변수를 함수 맨 꼭대기로 '끌어올린' 것처럼 동작한다.
+  ```javascript
+  var scope = 'global';
+  function f() {
+    console.log(scope);     // 'global'이 아리나 'undefined'를 출력한다.
+    var scope = 'local';    // 여기서 초기화하지만, 정의는 다른 곳에서 이루어 졌다.
+    console.log(scope);     // 'local'을 출력한다.
+  }
+  ```
+- 지역 변수는 함수 전체에 걸쳐서 정의된다. 즉 같은 이름의 젼역 변수는 함수 전체에서 이 지역 변수에 의해 감춰 진다.
+- 변수를 선언하는 좋은 방법은, 가능한 한 그 변수가 사용되는 가장 가까운 곳에서 선언하는 것이다.
