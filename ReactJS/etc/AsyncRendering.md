@@ -52,8 +52,8 @@
 	- `componentDidUdate`와 함께 이 새로운 라이프 사이클은 legacy `componentWillUpdate`의 모든 사용 사례를 다루어하 한다.
 
 ## Examples
-- [Initializing state](#Initializing)
-- [Fetching external data](#Fetching)
+- [Initializing state](#initializing-state)
+- [Fetching external data](#fetching-external-data)
 
 ### Initializing state
 - 이 예는 componentWillMount 내부에 setState 호출이 있는 component를 부여 준다.
@@ -81,7 +81,7 @@
 	}
 	```
 
-### Fetching external data(외부 데이터 가져 오기)
+### Fetching external data
 - 다음은 componentWillMount를 사용하여 외부 데이터를 가져 오는 component 예입니다.
 	```javascript
 	// Before
