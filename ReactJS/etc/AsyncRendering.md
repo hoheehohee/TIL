@@ -54,10 +54,12 @@
 ## Examples
 - [Initializing state](#initializing-state)
 - [Fetching external data](#fetching-external-data)
-- [Adding event listeners (or subscriptions)](#adding-event-listeners (or subscriptions))
-- [Updating state based on props](updating-state-based-on-props)
-- [Invoking external callbacks](invoking-external-callbacks)
-- [Side effects on props change](side-effects-on-props-change)
+- [Adding event listeners (or subscriptions)](#adding-event-listeners-(or-subscriptions))
+- [Updating state based on props](#updating-state-based-on-props)
+- [Invoking external callbacks](#invoking-external-callbacks)
+- [Side effects on props change](#side-effects-on-props-change)
+- [Fetching external data when props change](#fetching-external-data-when-props-change)
+- [Reading DOM properties before an update](#reading-DOM-properties-before-an-update)
 
 ### Initializing state
 - 이 예는 componentWillMount 내부에 setState 호출이 있는 component를 부여 준다.
@@ -311,7 +313,7 @@
 	```
 
 ### Side effects on props change
-- 위의 예와 마찬가지로, component가 변경되면 component에 부작용이 있을 수도 있다.
+- 위의 [예와 마찬가지](invoking-external-callbacks)로, props가 변경되면 component에 부작용이 있을 수도 있다.
 	```javascript
 	// Before
 	class ExampleComponent extends React.Component {
@@ -322,4 +324,159 @@
 	  }
 	}
 	```
-- `componentWillUpdate`와 같이 `componentWillReceiveProps`는 단일 업데이트에 대해 여러 번 호출 될 수 있다.
+- `componentWillUpdate`와 같이 `componentWillReceiveProps`는 단일 업데이트에 대해 여러 번 호출 될 수 있다. 이런 이유로 이 방법에 부작용을 주지 않는 것이 중요하다.
+	대신 `componentDidUpdate`는 업데이트당 한 번만 호출되도록 보장 되게 사용해야 합니다.:
+	```javascript
+	// After
+	class ExampleComponent extends React.Component {
+	  componentDidUpdate(prevProps, prevState) {
+	    if (this.props.isVisible !== prevProps.isVisible) {
+	      logVisibleChange(this.props.isVisible);
+	    }
+	  }
+	}
+	```
+
+### Fetching external data when props change
+- props 변경 시 외부 데이터 가져 오기
+- 다음은 props 값을 기준으로 외부 데이터를 가져 오는 component 예:
+	```javascript
+	// Before
+	class ExampleComponent extends React.Component {
+	  state = {
+	    externalData: null,
+	  };
+
+	  componentDidMount() {
+	    this._loadAsyncData(this.props.id);
+	  }
+
+	  componentWillReceiveProps(nextProps) {
+	    if (nextProps.id !== this.props.id) {
+	      this.setState({externalData: null});
+	      this._loadAsyncData(nextProps.id);
+	    }
+	  }
+
+	  componentWillUnmount() {
+	    if (this._asyncRequest) {
+	      this._asyncRequest.cancel();
+	    }
+	  }
+
+	  render() {
+	    if (this.state.externalData === null) {
+	      // Render loading state ...
+	    } else {
+	      // Render real UI ...
+	    }
+	  }
+
+	  _loadAsyncData(id) {
+	    this._asyncRequest = asyncLoadData(id).then(
+	      externalData => {
+	        this._asyncRequest = null;
+	        this.setState({externalData});
+	      }
+	    );
+	  }
+	}
+	```
+- 이 component의 추천하는 변경 방법은 데이터 업데이트를 `componentDidUpdate`로 이동하는 것이다.
+	새 `getDerivedStateFromProps` 라이프 사이클을 사용하여 새 props를 랜더링하기 전에 부실 데이터를 지울 수도 있다.
+	```javascript
+	// After
+	class ExampleComponent extends React.Component {
+	  state = {
+	    externalData: null,
+	  };
+
+	  static getDerivedStateFromProps(nextProps, prevState) {
+	    // Store는 상태가 미리 유지되므로 props가 언제 바뀌는 지 비교할 수 있습니다.
+	    // 이전에 로드 된 데이터를 지우워라 (그래서 우리는 부실 항목을 렌더링하지 않는다).
+	    if (nextProps.id !== prevState.prevId) {
+	      return {
+	        externalData: null,
+	        prevId: nextProps.id,
+	      };
+	    }
+
+	    // state 업데이트가 필요하지 않는다.
+	    return null;
+	  }
+
+	  componentDidMount() {
+	    this._loadAsyncData(this.props.id);
+	  }
+
+	  componentDidUpdate(prevProps, prevState) {
+	    if (this.state.externalData === null) {
+	      this._loadAsyncData(this.props.id);
+	    }
+	  }
+
+	  componentWillUnmount() {
+	    if (this._asyncRequest) {
+	      this._asyncRequest.cancel();
+	    }
+	  }
+
+	  render() {
+	    if (this.state.externalData === null) {
+	      // Render loading state ...
+	    } else {
+	      // Render real UI ...
+	    }
+	  }
+
+	  _loadAsyncData(id) {
+	    this._asyncRequest = asyncLoadData(id).then(
+	      externalData => {
+	        this._asyncRequest = null;
+	        this.setState({externalData});
+	      }
+	    );
+	  }
+	}
+	```
+- [axios](https://www.npmjs.com/package/axios) 와 같은 취소를 지원하는 HTTP 라이브러리를 사용하는 경우 마운트 해제시 진행중인 요청을 취소하는 것이 간단하다.
+	기본 약속의 경우 [여기에 표시된 것](https://gist.github.com/bvaughn/982ab689a41097237f6e9860db7ca8d6)과 같은 접근 방식을 사용할 수 있습니다.
+
+### Reading DOM properties before an update
+- 다음은 목록 내의 스크롤 위치를 유지하기 위해 업데이트 전에 DOM에서 속성을 읽는 component의 예:
+
+	```javascript
+	class ScrollingList extends React.Component {
+	  listRef = null;
+	  previousScrollOffset = null;
+
+	  componentWillUpdate(nextProps, nextState) {
+	    // 목록에 새 항목을 추가하고 있습니까?
+	    // 나중에 스크롤을 조정할 수 있도록 스크롤 위치를 캡처하십시오.
+	    if (this.props.list.length < nextProps.list.length) {
+	      this.previousScrollOffset = this.listRef.scrollHeight - this.listRef.scrollTop;
+	    }
+	  }
+
+	  componentDidUpdate(prevProps, prevState) {
+	    // previousScrollOffset이 설정된 경우 새 항목이 추가되었습니다.
+	    // 스크롤을 조정하여 새 항목으로 인해 이전 항목이 보이지 않게합니다.
+	    if (this.previousScrollOffset !== null) {
+	      this.listRef.scrollTop = this.listRef.scrollHeight - this.previousScrollOffset;
+	      this.previousScrollOffset = null;
+	    }
+	  }
+
+	  render() {
+	    return (
+	      <div ref={this.setListRef}>
+	        {/* ...contents... */}
+	      </div>
+	    );
+	  }
+
+	  setListRef = ref => {
+	    this.listRef = ref;
+	  };
+	}
+	```
