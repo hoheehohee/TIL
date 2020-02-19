@@ -36,7 +36,7 @@ const TodoApp = () => {
     //setTodos(todos.concat(todo));
     setTodos(todos => todos.concat(todo));
     nextId.current += 1;  // nextId 1씩 더하기
-  // }, [todos]);
+  // }, [todos]); 
   }, []);
 
   const onRemove = useCallback((id) => {

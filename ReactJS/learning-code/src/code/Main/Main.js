@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import { Ref, Header, UseMemo, TodoApp } from 'code';
+import { Exa_17_2_1 } from 'code/ReduxExa/containers/';
 
 class Main extends Component {
   render() {
@@ -18,6 +19,7 @@ class Main extends Component {
         )} />
         <Route path="/useMemo" component={UseMemo} />
         <Route path="/todoList" component={TodoApp} />
+        <Route path="/exa17_2_1" component={Exa_17_2_1} />
       </Router >
     );
   }
