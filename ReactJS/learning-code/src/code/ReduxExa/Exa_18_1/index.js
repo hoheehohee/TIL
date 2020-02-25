@@ -1,0 +1,1 @@
+export { default } from './Exa_18_1';

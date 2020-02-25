@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Counter from '../components/Counter';
 import { decrease, increase } from '../modules/counter';
 
@@ -9,6 +9,7 @@ const CounterContainer = ({ number, increase, decrease }) => {
   );
 };
 
+/*
 const mapStateToProps = state => ({
   number: state.counter.number
 });
@@ -27,3 +28,14 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(CounterContainer);
+*/
+
+// bindActionCreators 유틸 함수를 사용
+export default connect(
+  state => ({
+    number: state.counter.number,
+  }),
+  {
+    increase, decrease
+  }
+)(CounterContainer)
