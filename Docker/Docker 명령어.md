@@ -1,5 +1,5 @@
-Docker 기본 명령어
------
+4.1 Docker 이미지 조작 명령어
+=====
 
 > #### Docker 버전 확인
 > ```bash
@@ -48,3 +48,49 @@ Docker 기본 명령어
 > ```
 >
 > ![image_tag.png](./images/image_tag.png)
+
+> #### 이미지 검색 
+> Docker Hub에 공개되어 있는 이미지를 검색할 때
+> ```bash
+> $ docker search [옵션] <검색 키워드>
+> $ docker search --filter=start=1000 nginx <인기 있는 이미지 검색>
+> ```
+>
+> ![image_search01.png](./images/image_search01.png)
+> ![image_search02.png](./images/image_search02.png)
+
+> #### 이미지 삭제
+> ```bash
+> $ docker image rm [옵션] 이미지명 [이미지명]
+> ```
+>
+> ![image_rm01.png](./images/image_rm01.png)
+>
+> #### 사용하지 않은 Docker 이미지를 전체 삭제 
+> ```bash
+> $ docker image prune [옵션]
+> ```
+>
+> ![image_prune.png](./images/image_prune.png)
+
+> #### Docker Hub에 로그인 
+> ```bash
+> $ docker login [옵션] [서버]
+> ```
+>
+> ![login.png](./images/login.png)
+>
+> #### Docker Hub 로그아웃
+> ```bash
+> $ docker logout [서버명]
+> ```
+
+
+> #### 이미지 업로드 
+> ```bash
+> $ docker image push <Docker Hub 사용자명>/이미지명[:태그명]
+> ```
+> ![image_push.png](./images/image_push.png)
+
+Docker 컨테이너 생성 / 시작 / 정지
+-----
