@@ -22,8 +22,21 @@
   - [Docker Hub에 로그인](#Docker-Hub에-로그인)
   - [Docker Hub 로그아웃](#Docker-Hub-로그아웃)
   - [이미지 업로드](#이미지-업로드)
-
 - [4.2 Docker 컨테이너 생성 / 시작 / 정지](#4.2-Docker-컨테이너-생성-/-시작-/-정지)
+  - [Docker 컨테이너의 라이플 사이클](#Docker-컨테이너의-라이플-사이클)
+  - [컨테이너를 조학하기 위한 기본 명령어 네 가지.](#컨테이너를-조학하기-위한-기본-명령어-네-가지.)
+  - [컨테이너 생성 및 시작](#컨테이너-생성-및-시작)
+  - [컨테이너 백그라운드 실행](#컨테이너-백그라운드-실행)
+  - [컨테이너 네트워크 설정](#컨테이너-네트워크-설정)
+  - [자원을 지정하여 컨테이너 생성 및 실행](#자원을-지정하여-컨테이너-생성-및-실행)
+  - [컨테이너를 생성 및 시작하는 환경을 지정 ](#컨테이너를-생성-및-시작하는-환경을-지정-)
+  - [가동 컨테이너 목록 표시](#가동-컨테이너-목록-표시)
+  - [컨테이너 가동 확인](#컨테이너-가동-확인)
+  - [컨테이너 시작](#컨테이너-시작)
+  - [컨테이너 정지](#컨테이너-정지)
+  - [컨테이너 재시작](#컨테이너-재시작)
+  - [컨테이너 삭제](#컨테이너-삭제)
+  - [컨테이너 중단/재개](#컨테이너-중단/재개)
 
 
 2.1 컨테이너 기술의 개요
@@ -110,20 +123,20 @@
 
 > #### Docker 이미지 다운로드
 > nginx를 클라이언트 PC로 이미지 다운로드
+>
+> ![image_pull_option.png](./images/image_pull_option.png)
 > ```bash
 > $ docker image pull [옵션] 이미지명[:태크명]
 > ```
 > 옵션
 > - -a: 모든 태그를 취득할 수 있다. -a 옵션을 지장할 때는 이미지명에 태그를 지정 불가.
->
-> ![image_pull_option.png](./images/image_pull_option.png)
 
 > #### Docker 이미지 확인
+>
+> ![image_ls.png](./images/image_ls.png)
 > ```bash
 > $ docker image ls
 > ```
->
-> ![image_ls.png](./images/image_ls.png)
 
 > #### 이미지 상세 정보 확인
 > ```bash
@@ -140,35 +153,35 @@
 > ![image_tag.png](./images/image_tag.png)
 
 > #### 이미지 검색 
-> Docker Hub에 공개되어 있는 이미지를 검색할 때
+> - Docker Hub에 공개되어 있는 이미지를 검색할 때
+>
+> ![image_search01.png](./images/image_search01.png)
+> ![image_search02.png](./images/image_search02.png)
 > ```bash
 > $ docker search [옵션] <검색 키워드>
 > $ docker search --filter=start=1000 nginx <인기 있는 이미지 검색>
 > ```
->
-> ![image_search01.png](./images/image_search01.png)
-> ![image_search02.png](./images/image_search02.png)
 
 > #### 이미지 삭제
+>
+> ![image_rm01.png](./images/image_rm01.png)
 > ```bash
 > $ docker image rm [옵션] 이미지명 [이미지명]
 > ```
 >
-> ![image_rm01.png](./images/image_rm01.png)
->
 > #### 사용하지 않은 Docker 이미지를 전체 삭제 
+>
+> ![image_prune.png](./images/image_prune.png)
 > ```bash
 > $ docker image prune [옵션]
 > ```
->
-> ![image_prune.png](./images/image_prune.png)
 
 > #### Docker Hub에 로그인 
+>
+> ![login.png](./images/login.png)
 > ```bash
 > $ docker login [옵션] [서버]
 > ```
->
-> ![login.png](./images/login.png)
 >
 > #### Docker Hub 로그아웃
 > ```bash
@@ -210,33 +223,33 @@
 > - 정지 중인 컨테이너를 삭제할 때 사용
 
 > #### 컨테이너 생성 및 시작
-> ```bash
-> $ docker container run [옵션] 이미지명[:태그명][인수]
-> ```
 >
 > ![container_run01.png](./images/container_run01.png)
 > ![container_run02.png](./images/container_run02.png)
 > ![container_run03.png](./images/container_run03.png)
+> ```bash
+> $ docker container run [옵션] 이미지명[:태그명][인수]
+> ```
 >
 > #### 컨테이너 백그라운드 실행
 > 대화식이 아니라 백그라운드에서 실행
-> ```bash
-> $ docker container run [실행 옵션] 이미지명[:태그명] [인수]
-> ```
 >
 > ![container_run04.png](./images/container_run04.png)
-> - -rm: 실행 후의 컨테이너를 자동으로 삭제 
-> - **-restart 옵션**  
 > ![container_run05.png](./images/container_run05.png)
-> - 예를 들어 /bin/bash를 exit 명령으로 종료 해도 자동으로 컨테이너를 재시작 할 때  
-> ![container_run06.png](./images/container_run06.png)
+> ```bash
+> $ docker container run [실행 옵션] 이미지명[:태그명] [인수]
+> $ docker container run -it --restart-always centos /bin/bash </bin/bash를 exit 명령으로 종료 해도 자동으로 컨테이너를 재시작 할 때 >
+> ```
 
 > #### 컨테이너 네트워크 설정
+>
+> ![container_run_네트워크01.png](./images/container_run_네트워크01.png)
 > ```bash
 > $ docker container run [네트워크] 이미지명[:태크명] [인수]
 > $ docker container run -d -p 8080:80 nginx
 > ```
-> nginx라는 이름의 이미지를 바탕으로 컨테이너를 생성하고, 백그라운드에서 실행하고 이때 호스트의 포트 번호 8080과 컨테이너의 포트 번호 80을 매핑
+> nginx라는 이름의 이미지를 바탕으로 컨테이너를 생성하고, 백그라운드에서 실행하고 이때 호스트의 포트 번호 8080과 컨테이너의 포트 번호 80을 매핑  
+>
 > ![container_run_네트워크02.png](./images/container_run_네트워크02.png)
 > ```bash
 > 컨테이너 DNS 서버 지정
@@ -246,16 +259,98 @@
 > 호스트명과 IP주소 정의
 > $ docker container run -it --add-host test.com:192.168.1.1 centos
 > ```
-> ![container_run_네트워크01.png](./images/container_run_네트워크01.png)
 
 > #### 자원을 지정하여 컨테이너 생성 및 실행
 > - 컨테이너 시작할 때 CPU와 메모리의 자원 이용을 제한.
 > - 기본값으로 cpu-shares는 1024
 > - 컨테이너 안의 디렉토리를 공유 가능.
+>
+> ![container_run_자원01.png](./images/container_run_자원01.png)
 > ```bash
 > $ docker container run [자원 옵션] 이미지명[:태그명] [인수]
 > $ docker container run --cpu-shares=512 --memory=1g centos <cpu-shares의 값을 512로 설정>
 > $ docker container run -v /User/asa/webap:/user/share/nginx/html nginx <호스트의 /User/asa/webap 폴더를 컨테이너의 /user/share/nginx/html 디렉토리와 공유>
 > ```
+
+> #### 컨테이너를 생성 및 시작하는 환경을 지정 
+> - 환경변수나 컨테이너 안의 작업 디렉토리 등을 지정 가능
 >
-> ![container_run_자원01.png](./images/container_run_자원01.png)
+> ![container_run_환경변수.png](./images/container_run_환경변수.png)
+> ```bash
+> $ docker container run [환경설정 옵션] 이미지명[:태크명] [인수]
+> $ docker container run -it -e foo=bar centos /bin/bash <환경변수 지정>
+> $ docker container run -it --env-file=env_list centos /bin/bash <환경변수를 정의한 파일로부터 일괄적으로 등록>
+> $ docker container run -it -w=/tensorflow centos /bin/bash <컨테이너의 작업 디렉토리를 지정하여 실행>
+> ```
+>
+
+> #### 가동 컨테이너 목록 표시
+> - 작동하는 컨테이너의 가동 상태를 확인할 때
+>
+> ![container_run_목록01.png](./images/container_run_목록01.png)
+> ![container_run_목록_결과.png](./images/container_run_목록_결과.png)
+> ```bash
+> $ docker container ls [옵션]
+> $ docker container ls -a -f name=test1 <컨테이너 목록 필러링(test1인 것을 조건으로 조회)>
+> $ docker container ls -a -f exited=0 <STATUS에 종료 코드가 0인 것>
+> ```
+
+> #### 컨테이너 가동 확인
+> - Docker 상에서 작동하는 컨테이너 가동 상태 확인
+>
+> ![container_run_stats.png](./images/container_run_stats.png)
+> ```bash
+> $ docker container stats [컨테이너 식별자]
+> $ docker container stats webserver <webserver라는 이름의 컨테이너 가동 상황을 확인>
+> $ docker container top webserver <컨테이너에서 실행 중인 프로세스를 확인할 때 top 사용>
+> ```
+
+> #### 컨테이너 시작
+> - 정지하고 있는 컨테이너를 시작할 때
+> - 여러 개의 컨테이너를 한꺼번에 시작하고 싶을 때는 인수에 컨테이너 식별자를 여러 개 지정 가능
+>
+> ![container_run_start.png](./images/container_run_start.png)
+> ```bash
+> $ docker container start [옵션] <컨테이너 식별자> [컨테이너 식별자]
+> $ docker container start dbb4bbe0f470 <dbb4bbe0f470 컨테이너를 시작>
+> ```
+
+> #### 컨테이너 정지
+> - 컨테이너를 정지할 때
+>
+> ![container_run_stop.png](./images/container_run_stop.png)
+> ```bash
+> $ docker container stop [옵션] <컨테이너 식별자> [컨테이너 식별자]
+> $ docker container stop -t 2 dbb4bbe0f470 <dbb4bbe0f470 컨테이너를 2초 후에 정지>
+> $ docker container kill <강제적으로 컨테이너를 정지시킬 때>
+> ```
+
+> #### 컨테이너 재시작
+> - 컨테이너를 재시작할 때
+>
+> ![container_run_restart.png](./images/container_run_restart.png)
+> ```bash
+> $ docker container restart [옵션] <컨테이너 식별자> [컨테이너 식별자]
+> $ docker container restart -t 2 webserver <webserver인 컨테이너를 2초 후에 재시작>
+> ```
+
+> #### 컨테이너 삭제
+> - 정지하고 있는 컨테이너를 삭제할 때
+>
+>![container_run_rm.png](./images/container_run_rm.png)
+> ```bash
+> $ docker container rm [옵션] <컨테이너 식별자> [컨테이너 식별자]
+> $ docker container rm dbb4bbe0f470 <dbb4bbe0f470인 컨테이너를 삭제>
+> $ docker container prune <정지 중인 모든 컨테이너를 삭제>
+> ```
+
+> #### 컨테이너 중단/재개
+> - 실행중인 컨테이너에서 작동 중인 프로세스를 모두 중단시킬 때
+> ```bash
+> $ docker container pause <컨테이너 식별자>
+> $ docker container pause webserver <webserver인 컨테이너를 일시 중단시킨다>
+> $ docker container unpause webserver <중단시킨 webserver의 컨테이너를 재개>
+> ```
+
+4.3 Docker 컨테이너 네트워크
+=====
