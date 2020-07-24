@@ -201,9 +201,9 @@ Docker 컨테이너 생성 / 시작 / 정지
 >
 > ![container_run04.png](./images/container_run04.png)
 > - -rm: 실행 후의 컨테이너를 자동으로 삭제 
-> - **-restart 옵션**
+> - **-restart 옵션**  
 > ![container_run05.png](./images/container_run05.png)
-> - 예를 들어 /bin/bash를 exit 명령으로 종료 해도 자동으로 컨테이너를 재시작 할 때
+> - 예를 들어 /bin/bash를 exit 명령으로 종료 해도 자동으로 컨테이너를 재시작 할 때  
 > ![container_run06.png](./images/container_run06.png)
 
 > #### 컨테이너 네트워크 설정
