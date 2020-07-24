@@ -1,3 +1,31 @@
+목차
+====
+- [2.1 컨테이너 기술의 개요](#2.1-컨테이너-기술의-개요)  
+  - [컨테이너](#컨테이너)
+- [2.2 Docker 개요](#2.2-Docker-개요)
+  - [프로그래머에게 Docker란?](#프로그래머에게-Docker란?)
+- [2.3 Docker의 기능](#2.3-Docker의-기능)
+  - [Docker 이미지를 만드는 기능 (Build)](#Docker-이미지를-만드는-기능-(Build))
+  - [Docker 이미지를 공유하는 기능 (Ship)](#Docker-이미지를-공유하는-기능-(Ship))
+  - [Docker 컴포넌트](#Docker-컴포넌트)
+- [4.1 Docker 이미지 조작 명령어](#4.1-Docker-이미지-조작-명령어)
+  - [Docker 버전 확인](#Docker-버전-확인)
+  - [Docker 실행 환경 확인](#Docker-실행-환경-확인)
+  - [Docker 디스크 이용 상황](#Docker-디스크-이용-상황)
+  - [Docker 이미지 다운로드](#Docker-이미지-다운로드)
+  - [Docker 이미지 확인](#Docker-이미지-확인)
+  - [이미지 상세 정보 확인](#이미지-상세-정보-확인)
+  - [이미지 태그 설정](#이미지-태그-설정)
+  - [이미지 검색 ](#이미지-검색-)
+  - [이미지 삭제](#이미지-삭제)
+  - [사용하지 않은 Docker 이미지를 전체 삭제 ](#사용하지-않은-Docker-이미지를-전체-삭제)
+  - [Docker Hub에 로그인](#Docker-Hub에-로그인)
+  - [Docker Hub 로그아웃](#Docker-Hub-로그아웃)
+  - [이미지 업로드](#이미지-업로드)
+
+- [4.2 Docker 컨테이너 생성 / 시작 / 정지](#4.2-Docker-컨테이너-생성-/-시작-/-정지)
+
+
 2.1 컨테이너 기술의 개요
 ==========
 ### 컨테이너
@@ -154,13 +182,10 @@
 > ```
 > ![image_push.png](./images/image_push.png)
 
-Docker 컨테이너 생성 / 시작 / 정지
------
-
 4.2 Docker 컨테이너 생성 / 시작 / 정지
 =====
 > 이미지가 만들어졌으면 컨테이너를 생성할 수 있다.
-### Docker 컨테이너의 라이플 사이클
+#### Docker 컨테이너의 라이플 사이클
 ![docker_라이프사이클.png](./images/docker_라이프사이클.png)
 
 #### 컨테이너를 조학하기 위한 기본 명령어 네 가지.
@@ -222,3 +247,15 @@ Docker 컨테이너 생성 / 시작 / 정지
 > $ docker container run -it --add-host test.com:192.168.1.1 centos
 > ```
 > ![container_run_네트워크01.png](./images/container_run_네트워크01.png)
+
+> #### 자원을 지정하여 컨테이너 생성 및 실행
+> - 컨테이너 시작할 때 CPU와 메모리의 자원 이용을 제한.
+> - 기본값으로 cpu-shares는 1024
+> - 컨테이너 안의 디렉토리를 공유 가능.
+> ```bash
+> $ docker container run [자원 옵션] 이미지명[:태그명] [인수]
+> $ docker container run --cpu-shares=512 --memory=1g centos <cpu-shares의 값을 512로 설정>
+> $ docker container run -v /User/asa/webap:/user/share/nginx/html nginx <호스트의 /User/asa/webap 폴더를 컨테이너의 /user/share/nginx/html 디렉토리와 공유>
+> ```
+>
+> ![container_run_자원01.png](./images/container_run_자원01.png)
