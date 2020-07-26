@@ -43,6 +43,14 @@
   - [네트워크 연결](#네트워크-연결)
   - [네트워크 상세 정보 확인](#네트워크-상세-정보-확인)
   - [네트워크 삭제](#네트워크-삭제)
+- [4.4 가동중인 Docker 컨테이너 조작](#4.4-가동중인-Docker-컨테이너-조작)
+  - [가동 컨테이너 연결](#가동-컨테이너-연결)
+  - [가동 컨테이너에서 프로세스 실행 ](#가동-컨테이너에서-프로세스-실행)
+  - [가동 컨테이너의 프로세스 확인 ](#가동-컨테이너의-프로세스-확인)
+  - [가동 컨테이너의 포트 전송 ](#가동-컨테이너의-포트-전송)
+  - [컨테이너 이름 변경](#컨테이너-이름-변경)
+  - [컨테이너 안의 파일을 복사](#컨테이너-안의-파일을-복사)
+  - [컨테이너 조작의 차분 확인](#컨테이너-조작의-차분-확인)
 
 
 2.1 컨테이너 기술의 개요
@@ -400,4 +408,51 @@
 >```bash
 > $ docker network rm [옵션] 네트워크
 > $ dockwer network rm web-network <'web-network'라는 이름의 네트워크를 삭제한다. 단 삭제 전에 disconnect 명령을 사용하여 연중 해제해야함.>
+>```
+4.4 가동중인 Docker 컨테이너 조작
+=====
+> - 이미 가동 중인 컨테이너의 상태를 확인하거나 임의의 프로세스를 실행시킬 때 하는 조작에 대해
+#### 가동 컨테이너 연결
+> - 연결한 컨테이너 종료 (ctrl + c)
+> - 컨테이너 안에서 움직이는 프로세스(이 경우 /bin/bash)만 종료 (ctrl + p, ctrl +)
+>```bash
+> $ docker container attach sample </bin/bash가 실행되고 있는 sample이라는 이름의 컨테이너에 연결>
+>```
+#### 가동 컨테이너에서 프로세스 실행 
+> - 가동중인 컨테이너에서 새로운 프로세스를 실행할 때
+>
+> ![container_exec01.png](./images/container_exec01.png)
+>```bash
+> $ docker container exec [옵션] <컨테이너 식별자> <실행할 명령> [인수]
+> $ docker container exec -it webserver /bin/bash <webserver라는 이름으로 가동 중인 컨테이너에 /bin/bash를 실행 컨테이너 안에서 임의의 명령 실행 가능>
+> $ docker container exec -it webserver /bin/bash "hello word" <명령을 직접 실행>
+>```
+#### 가동 컨테이너의 프로세스 확인 
+> - 가동 중인 컨테이너에서 실행되고 있는 프로세스를 확인할 때
+>```bash
+> $ docker container top <실행 중인 프로세스의 PID와 USER, 실행 중인 명령이 표시 된다.>
+> $ docker container top webserver <"webserver"라는 이름의 컨테이너의 프로세스를 확인>
+>```
+#### 가동 컨테이너의 포트 전송 
+> - 가동 중인 컨테이너에서 실행되고 있는 프로세스가 전송되고 있는 포트를 확인
+>```bash
+> $ docker container port webserver <"webserver"라는 이름의 컨테이너의 포트 전송을 확인>
+>```
+#### 컨테이너 이름 변경
+> - 컨테이너 이름을 변경 
+>```bash
+> $ docker container rename old new <"old"라는 이름의 컨테이너를 "new"라는 이름으로 변경>
+>```
+#### 컨테이너 안의 파일을 복사
+> - 컨테이너 안의 파일을 호스트에 복사할 때 
+>```bash
+> $ docker container cp <컨테이너 식별자>:<컨테이너 안의 파일경로> <호스트의 디렉토리 경로>
+> $ docker container cp <호스트 파일> <컨테이너 식별자>:<컨테이너 안의 파일경로>
+> $ docker container cp webserver:/etc/nginx/nginx.config /tmp/etc <"webserver"라는 컨테이너 안에 있는 /etc/nginx/nginx.config 파이를 호스트의 /tmp/etc안에 복사>
+> $ docker container cp cp ./test.txt webserver:/tmp/text.txt <반대로 호스트의 test.txt 파일을 "webserver"라는 이름의 컨테이너 안에 복사>
+>```
+#### 컨테이너 조작의 차분 확인
+> - 컨테이너 안에서 어떤 조작을 하여 컨테이너가 이미지로부터 생성되었을 때와 딸라진 점(차분)을 확인 
+>```bash
+> $ docker container diff <컨테이너 식별자>
 >```
