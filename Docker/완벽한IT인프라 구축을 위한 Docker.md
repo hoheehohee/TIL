@@ -51,6 +51,13 @@
   - [컨테이너 이름 변경](#컨테이너-이름-변경)
   - [컨테이너 안의 파일을 복사](#컨테이너-안의-파일을-복사)
   - [컨테이너 조작의 차분 확인](#컨테이너-조작의-차분-확인)
+- [4.5 Docker 이미지 생성](#4.5-Docker-이미지-생성)
+  - [컨테이너부터 이미지 작성](#컨테이너부터-이미지-작성)
+  - [컨테이너를 tar파일로 출력](#컨테이너를-tar파일로-출력)
+  - [tar 파일로부터 이미지 작성](#tar-파일로부터-이미지-작성)
+  - [이미지 저장](#이미지-저장)
+  - [이미지 읽어 들이기](#이미지-읽어-들이기)
+  - [불필요한 이미지/컨테이너를 일괄 삭제](#불필요한-이미지/컨테이너를-일괄-삭제)
 
 
 2.1 컨테이너 기술의 개요
@@ -455,4 +462,49 @@
 > - 컨테이너 안에서 어떤 조작을 하여 컨테이너가 이미지로부터 생성되었을 때와 딸라진 점(차분)을 확인 
 >```bash
 > $ docker container diff <컨테이너 식별자>
+>```
+4.5 Docker 이미지 생성
+=====
+> Docker 컨테이너는 Docker 이미지를 바탕으로 작성하지만 반대로 Docker 컨테이너를 바탕으로 Docker 이미지를 작성할 수도 있다.
+#### 컨테이너부터 이미지 작성
+> - 컨테이너로부터 이미지를 작성 
+>
+> ![container_commit01.png](./images/container_commit01.png)
+>```bash
+> $ docker container commit [옵션] <컨테이너 식별자> [이미지명[:태그명]]
+> $ docker container commit -a "ASA SHIHO" webserver hoheehohee/webfront:1.0 <"webserver"라는 이름의 컨테이너를 "hoheehohee/webfront"라는 이름으로 태그명을 1.0으로 지정하여 새로운 이미지를 작성.>
+>```
+#### 컨테이너를 tar파일로 출력
+> - Docker에서는 가동 중인 컨테이너의 디렉토리/파일들을 모아서 tar파일로 만들 수 있다.
+> - 이 tar 파을을 바탕으로 다른 서버에서 컨테이너를 가동시킬수 있다. 
+>```bash
+> $ docker container export <컨테이너 식별자>
+> $ docker container export webserver > latest.tar <"webserver"라는 컨테이너를 "latest.tar"라는 tar 파일로 출력>
+> $ tar -tf latest.tar |more <tar 파일의 내용을 확인>
+>```
+#### tar 파일로부터 이미지 작성 
+> - Linux OS 이미지의 디렉토리/파일로부터 Docker 이미지를 만들 수 있다.
+>```bash
+> $ docker image import <파일 또는 URL> | - [이미지명[:태그명]]
+> $ cat latest.tar | docker image import - hoheehohee/webfront:1.1 <latest.tar로 모아놓은 디렉토리나 파일을 바탕으로 "hoheehohee/webfront"라는 이름의 태그명 1.1인 이미지를 작성한다.>
+>```
+#### 이미지 저장
+> - Docker 이미지를 tar 파일로 저장할 수 있다. 
+>```bash
+> $ docker image save [옵션] <저장 파일명> [이미지명]
+> $ docker image save -o export.tar tensorflow <"tensorflow"라는 이름의 이미지를 export.tar에 저장>
+>```
+#### 이미지 읽어 들이기
+> - tar 이미지로부터 이미지를 읽어 들을 수 있다. 
+>```bash
+> $ docker image load [옵션]
+> $ docker image load -i export.tar <"export.tar"라는 이름의 이미지를 읽어 들인다.>
+>```
+#### 불필요한 이미지/컨테이너를 일괄 삭제
+> - 사용하지 않는 이미지, 컨테이너, 볼륨, 네트워크를 일괄적으로 삭제. 
+>
+> ![container_system_prune.png](./images/container_system_prune.png)
+>```bash
+> $ docker system prune [옵션]
+> $ docker system prune -a <사용하지 않는 리소스를 모두 삭제>
 >```
