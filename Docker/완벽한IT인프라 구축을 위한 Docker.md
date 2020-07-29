@@ -544,3 +544,23 @@
 > # 베이스 이미지 설정
 > FROM centos:centos7
 > ```
+5.2 Dockerfile의 빌드와 이미지 레이어
+=====
+> Dockerfile을 빌드하면 Dockerfile에 정의된 구성을 바탕으로 한 Docker 이미지를 작성할 수 있다. 
+#### Dockerfile로부터 Docker 이미지 만들기
+> - Dockerfile로부터 이미지를 생성
+> ```
+> # 베이스 이미지 설정
+> FROM centos:centos7
+> ```
+> ```bash
+> $ docker build -t [생성할 이미지명]:[태그명] [Dockerfile의 위치]
+> $ docker build -t sample:1.0 /home/docker/sample <'/home/docker/sample'에 저장된 Dockerfile로부터 sample이라는 이름의 Docker 이미지가 생성된다.>
+> ```
+> - Docker image ls 명령으로 확인하면 베이스 이미인 centos:centos7과 생성된 sample:1.0이 두 이미지가 만들어 진다.
+> ```bash
+> $ docker build -d sample -f Dockerfile.base .
+> ```
+> - Dockerfile에는 임이의 파일명을 붙일 수도 있다.
+> - 예를 들어 'Dockerfile.base'라는 이름의 파일을 지정하여 build 가능
+> - **. (닷)**으로 나타내므로 빠뜨리면 안된다.
