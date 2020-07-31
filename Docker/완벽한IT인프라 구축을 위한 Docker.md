@@ -62,7 +62,13 @@
   - [Dockerfile이란?](#Dockerfile이란?)
   - [Dockerfile의 기본 구문](#Dockerfile의-기본-구문)
   - [Dockerfile 작성](#Dockerfile-작성)
-
+- [5.2 Dockerfile의 빌드와 이미지 레이어](#5.2-Dockerfile의-빌드와-이미지-레이어)
+  - [Dockerfile로부터 Docker 이미지 만들기](#Dockerfile로부터-Docker-이미지-만들기)
+  - [Docker 이미지의 레이어 구조](#Docker-이미지의-레이어-구조)
+- [5.3 멀티스테이지 빌드를 사용한 애플리케이션 개발](#5.3-멀티스테이지-빌드를-사용한-애플리케이션-개발)
+  - [Dockerfile 만들기](#Dockerfile-만들기)
+  - [Docker 이미지빌드](#Docker-이미지빌드)
+  - [Docker 컨테이너 시작](#Docker-컨테이너-시작)
 
 
 2.1 컨테이너 기술의 개요
@@ -564,3 +570,73 @@
 > - Dockerfile에는 임이의 파일명을 붙일 수도 있다.
 > - 예를 들어 'Dockerfile.base'라는 이름의 파일을 지정하여 build 가능
 > - **. (닷)**으로 나타내므로 빠뜨리면 안된다.
+#### Docker 이미지의 레이어 구조
+> Dockerfile을 빌드하여 Docker 이미지를 작성하면 Dockerfile의 명령별로 이미지를 작성된다. 작성된 여러 갸의 이미지는 레이어 구조로 되어 있다.
+> ![Dockerfile_레이어구조01.png](./images/Dockerfile_레이어구조01.png)
+>
+> ![Dockerfile_레이어구조02.png](./images/Dockerfile_레이어구조02.png)
+> - 로그를 확인하면 Dockerfile의 명령 한 줄마다 이미지가 작성된다.
+>
+> ![Dockerfile_레이어구조03.png](./images/Dockerfile_레이어구조03.png)
+>
+> ![Dockerfile_레이어구조04.png](./images/Dockerfile_레이어구조04.png)
+
+5.3 멀티스테이지 빌드를 사용한 애플리케이션 개발
+=====
+> 제품 환경에는 애플리케이션을 실행하기 위해 최소한으로 필요한 실행 모듈만 배치하는것이 효율적으로 활용할 수 있다는 점에서나 보안 관점에서 볼 때 바람직
+> 빌드 환경 이미지와 제품 환경 이지미
+>
+> ![멀티스테이지_빌드.png](./images/멀티스테이지_빌드.png);
+#### Dockerfile 만들기
+> ```
+> # 1.Build Image
+> # 개발용 언어 Go의 버전 1.8.4를 베이스 이미지로 하여 작성하고 
+> # "builder"라는 별명을 붙임.
+> FROM golang:1.8.4-jessie AS builder
+> 
+> # Install dependencies
+> # 개발에 필요한 버전을 실치
+> WORKDIR /go/src/github.com/asashiho/greet
+> RUN go get -d -v github.com/urfave/cli
+>
+> # Build modules
+> # 로컬 환경에 있는 소스코드를 컨테이너 안으로 복사
+> # 이 소스코드를 go build 명령으로 빌드하여 'greet'이라는 이름의 실행 가능 바이러니 파일 작성
+> COPY main.go
+> RUN GOOS=linux go build -a -o greet
+>
+> # ------------------------------------
+> # 2. Production Image
+> # 제품 환경용 Docker 이미지의 베이스 이미지로 'busybox'를 사용.
+> # BuysBox는 기본적인 Linux 명령들을 하나의 파일로 모아놓은 것으로, 최소한으로 필요한 Linux 쉘 환경을 제공
+> FROM busybox
+> WORKDIR /opt/greet/bin
+> 
+> # Deploy module
+> # 개발용 환경의 Docker 이미지로 빌드한 'greet'이라는 이름의 실행 가능한 바이너리 파일을 제품 환경용 Docker 이미지로 복사
+> # 이때 --from 옵션을 사용하여 'builder'이라는 이름의 이미지로부터 복사를 한다는 것을 선언
+> # 마지막으로 복사한 실행 가능 바이너리 파일을 실행.
+> COPY --from=builder /go/src/github.com/asashiho/greet/ .
+> ENTRYPOINT ["./greet"]
+> ```
+#### Docker 이미지빌드
+> Dockerfile을 빌드
+>
+> ![이미지_빌드01.png](./images/이미지_빌드01.png)
+> 
+> 1. Docker Hub에서 개발용 환경의 베이스 golang:1.8.4를 다운로드
+> 2. 그것을 바탕으로 'builder'가 생성
+> 3. 이 builder 이미지로 소스코드를 빌드하여 실행 가능 바이러니 파일을 생성
+> 4. 제품 환경용 이미지에 실행 가능 바이너리 파일을 복사
+> 
+> docker images ls로 각각의 이미지 용량을 확인하면 **개발 환경 이미지인 'golang:1.8.4'**는 714MB이지만, 제품 환경용인 **제품 환경용인 'greet'(실행컨테이너)**은 겨우 4.19MB이다.
+> 이것은 제품 환경용 베이스 이미지인 'busybox'의 1.13MB에 애플리케이션의 실행에 필요한 모듈만을 추가한 정도라는 것을 알 수 있다.
+#### Docker 컨테이너 시작
+> 제품 환경용 Docker 이미지인 'greet'를 사용하여 컨테이너를 실행
+> ```bash
+> $ docker container run -it --rm  greet asa
+> Hello asa
+> $ docker container run -it --rm  greet --lang=es asa
+> Hola asa
+> ```
+> - 제품 환경용으로 만든 저용량 이미지인 'greet'만으로 작동한다.
