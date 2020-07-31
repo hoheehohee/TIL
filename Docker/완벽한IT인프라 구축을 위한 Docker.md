@@ -572,6 +572,7 @@
 > - **. (닷)**으로 나타내므로 빠뜨리면 안된다.
 #### Docker 이미지의 레이어 구조
 > Dockerfile을 빌드하여 Docker 이미지를 작성하면 Dockerfile의 명령별로 이미지를 작성된다. 작성된 여러 갸의 이미지는 레이어 구조로 되어 있다.
+>
 > ![Dockerfile_레이어구조01.png](./images/Dockerfile_레이어구조01.png)
 >
 > ![Dockerfile_레이어구조02.png](./images/Dockerfile_레이어구조02.png)
@@ -640,3 +641,108 @@
 > Hola asa
 > ```
 > - 제품 환경용으로 만든 저용량 이미지인 'greet'만으로 작동한다.
+5.4 명령 및 데몬 실행
+=====
+> Dockerfile에서 명령이나 데몬을 실행하는 방법에 대해.
+#### 명령 실행(RUN 명령)
+> 컨테이너에는 FROM 명령에서 지정한 베이스 이미지에 대해서
+> 1. '애플리케이션/미들웨어를 설치 및 설정한다'. 
+> 2. '환경 구축을 위한 명령을 실행한다'.
+> 3. 가장 많이 사용되며 Dockerfile에 여러 개 기술할 수 있다.
+> ```
+> RUN [실행하고 싶은 명령]
+> ```
+> RUN 명령의 두가지 기술 방법
+> 1. Sheel 형식
+>   - 명령의 지정을 쉘에서 실행하는 형식으로 기술하는 방법
+>   - /bin/sh -c를 사용하여 명령을 실행했을 때와 똑같이 작동
+>   - Docker 컨테이너에서 실행할 기본 쉘을 변경하고 싶을 때는 Sheel명령을 사용
+>   ```
+>   # Nginx의 설치
+>   RUN apt-get install -y nginx
+>   ```
+> 2. Exec 형식으로 기술
+>   - Exec 형식으로 기술하면 쉘을 경유하지 않고 직접 실행
+>   - 명령 인수 $HOME과 같은 환경변수를 지정할 수 없다.
+>   - Exec 형식에서는 실행하고 싶은 명령을 JSON 배열로 지정
+>   ```
+>   # Nginx의 설치
+>   RUN ["/bin/bash", "-c", "apt-get install -y nginx"]
+>   ```
+>
+> - 이미지의 레이어에 대해
+> ```
+> RUN yum -y install httpd
+> RUN yum -y install php
+> RUN yum -y install php-mbstring
+> RUN yum -y install php-pear
+> ```
+> - Dockerfile을 빌드하면 기술된 명령마다 (한줄 한줄 마다) 내부 이미지가 하나씩 작성된다. 
+> - 이미지 생성 및 명령을 줄이는 방법
+> ```
+> # 한줄로 지정하는 경우
+> RUN yum -y install httpd php php-mbstring php-pear
+>
+> # 줄 바꿈
+> RUN yum -y install\
+>            httpd\
+>            php\
+>            php-mbstring\
+>            php-pear
+> ```
+#### 데몬 실행(CMD 명령)
+> - 이미지를 바탕으로 생성된 **컨테이너 안에서** 명령을 실행한다.
+> - Dockerfile에는 **하나의** CMD명령을 기술할 수 있다.(만약 여러 개를 지정하면 마지막 명령만 유효하다.)
+> ```
+> CMD [실행하고 싶은 명령]
+> ```
+> CMD 명령 세가지 기술 방법
+> 1. Exec 형식으로 기술
+>   - [RUN 명령](#명령-실행(RUN-명령))의 구문과 똑같음
+> ```
+>   CMD ["nginx", "-g", "daemon off;"]
+> ```
+> 2. Sheel 형식으로 기술
+>   - [RUN 명령](#명령-실행(RUN-명령))의 구문과 똑같음
+> ```
+>   CMD nginx -g 'daemon off;'
+> ```
+> 3. ENTRYPOINT 명령의 파라미터로 기술
+>   - ENTRYPOINT 명령의 인수를 CMD 명령을 사용할 수 있다.
+#### 데몬 실행(ENTRYPOINT 명령)
+> ENTRYPOINT 명령에서 지정한 명령은 Dockerfile에서 빌드한 이미지로부터 Docker 컨테이너를 시작하기 때문에 **docker container run 명령을** 실행했을 때 실행된다.
+> ```
+> ENTRYPOINT [실행하고 싶은 명령]
+> ```
+> ENTRYPOINT 명령의 두가지 기술 방법
+> 1. Exec 형식으로 기술
+>   - [RUN 명령](#명령-실행(RUN-명령))의 구문과 똑같음
+> ```
+>   ENTRYPOINT ["nginx", "-g" "deamon off;"]
+> ```
+> 2. Sheel 형식으로 기술
+>   - [RUN 명령](#명령-실행(RUN-명령))의 구문과 똑같음
+> ```
+>   ENTRYPOINT nginx -g 'daemon off;'
+> ```
+> ENTRYPOINT 명령과 CMD 명령의 차이
+> - docker container run 명령 실행 시의 동작에 있다.
+> - CMD 명령의 경우는 컨테이너 시작 시에 실행하고 싶은 명령을 정의해도 docker container run 명령 실행 시에 인수로 새로운 명령을 지정한 경우 이것을 우선 실행.
+> - ENTRYPOINT 명령에서 지정한 명령은 반드시 컨테이너에서 실행되는데, 실행 시에 명령 인수를 지정하고 싶을 때는 CMD명령과 조합하여 사용.
+> - ENTRYPOINT 명령으로 실행하고 싶은 명령 저체를 지정, CMD 명령으로는 그 명령의 인수를 지정하면, 컨테이너를 실행했을 때의 기본 작동을 결정할 수 있다.
+> ```
+> # Docker 이미지 취득
+> FROM ubuntu:16.04
+> 
+> # top 실행
+> # ENTRYPOINT 명령으로 top 명령을 실행
+> # CMD 명령으로 갱신 간격은 -d 옵션을 10초로 지정, 
+> # CMD 명령에서 지정한 옵션을 사용하여 실행 시(docker container run)의 인수를 임으로 지정할 수 있다.
+> ENTRYPOINT ["top"]
+> CMD ["-d", "10] 
+> ```
+> ```bash
+> $ docker container run -it sample <CMD 명령에서 지정한 10초 간격으로 갱신하는 경우>
+> $ 
+> $ docker container run -it sample -d 2 <2초 간격으로 갱신하는 경우>
+> ```
