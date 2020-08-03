@@ -76,6 +76,14 @@
   - [빌드 완료 후에 실행되는 명령 (ONBUILD 명령)](#빌드-완료-후에-실행되는-명령-onbuild-명령)
   - [시스템 콜 시그널의 설정(STOPSIGNAL 명령)](#시스템-콜-시그널의-설정stopsignal-명령)
   - [컨테이너 헬스 체크 명령(HEALTHCHECK 명령)](#컨테이너-헬스-체크-명령healthcheck-명령)
+- [5.5 환경 및 네트워크 설정](#55-환경-및-네트워크-설정)
+  - [설정 (ENV 명령)](#설정-ENV-명령)
+  - [작업 디렉토리 지정 (WORKDIR 명령)](#작업-디렉토리-지정-WORKDIR-명령)
+  - [사용자 지정 (USER 명령)](#사용자-지정-USER-명령)
+  - [라벨 지정 (LABEL 명령)](#라벨-지정-LABEL-명령)
+  - [포트 설정 (EXPOSE 명령)](#포트-설정-EXPOSE-명령)
+  - [Dockerfile 내 변수의 설정 (ARG 명령)](#Dockerfile-내-변수의-설정-ARG-명령)
+  - [기본 쉘 설정 (SHELL 명령)](#기본-쉘-설정-SHELL-명령)
 
 2.1 컨테이너 기술의 개요
 ==========
@@ -892,3 +900,75 @@
 >   WORKDIR $DIRPATH/$DIRNAME
 >   RUN ["pwd"]
 >   ```
+#### 사용자 지정 (USER 명령)
+> 이미지 실행이나 Dockerfile의 다음과 같은 명령을 실행하기 위한 사용자를 지정할 때 사용
+> - RUN 명령
+> - CMD 명령
+> - ENTRYPOINT 명령
+> ```
+> USER [사용자명/UID]
+> ```
+> - USER 명령에서 지정하는 사용자는 RUN 명령으로 미리 작성해 놓을 필요가 있다는 점에 주의해야한다.
+>   ```
+>   RUN ["adduser", "asa"]
+>   # whoami 명령은 사용자명을 표기하기 위한 Linux 명령임.
+>   RUN ["whoami"] <========================= 1
+>   USER asa
+>   RUN ["whoami"] <========================= 2
+>   ```
+>   - 첫 번째 whoami 명령(1)은 root이지만
+>   - 두 번째 whoami 명령(2)은 USER 명령으로 지정한 asa로 되어 있다.
+#### 라벨 지정 (LABEL 명령)
+> 이미지에 버전 정보나 작성자 정보, 코멘트 등과 같은 정보를 제공할 때 사용
+> ```
+> LABEL <키 명>=<값>
+> ```
+>
+> ```
+> LABEL maintainer "Shiho ASA<asashiho@mail.asa.seoul>"
+> LABEL title="WebAP"
+> LABEL version="1.0"
+> LABEL description="This image is WebApplicationServer"
+> ```
+>
+> ![Dockerfile_LABEL.png](./images/Dockerfile_LABEL.png)
+#### 포트 설정 (EXPOSE 명령)
+> 컨테이너의 공개 포트 번호를 지정할 때 사용
+> ```
+> EXPOST <포트 번호>
+> ```
+> - EXPOSE 명령은 Docker에게 실행 중인 컨테이너가 listen하고 있는 네트워크를 알려준다.
+> - docker container run 명령 -p 옵션을 사용할 때 어떤 포트를 호스트에 공개할지를 정의한다.
+#### Dockerfile 내 변수의 설정 (ARG 명령)
+> - Dockerfile 안에서 사용할 변수를 정의할 때 사용  
+> - ARG 명령을 사용하면 변수의 값에 따라 생서되는 이미지의 내용을 바꿀 수 있다.  
+> - 환경변수인 ENV와는 달리 이 변수는 Dockerfile 안에서만 사용할 수 있다.  
+> ```
+> ARG <이름>[=기본값]
+> ```
+>
+> ```
+> # 변수의 정의
+> ARG YOURNAME="asa"
+> RUN echo $YOURNAME
+> ```
+>
+> ```bash
+> $ docker build . --build-arg YOURNAME=shiho <Dockerfile을 빌드할 때 --build-arg 옵션을 붙여 ARG 명령에서 지정한 "YOURNBAME"에 'shiho'라는 값을 설정>
+> ```
+> - 로그를 확인하면 변수에 값이 설정되어 'shiho'값이 출력
+> - --build-arg 옵션을 붙이지 않고 docker build . 실행하면 ARG 명령에서 지정한 기본값 'asa'가 출력된다.
+#### 기본 쉘 설정 (SHELL 명령)
+> 쉘 형식으로 명령을 실행할 때 사용
+> ```
+> SHELL ["쉘의 경로", "파라미터"]
+> ```
+>
+> ```
+> # 기본 쉘 지정
+> SHELL ["bin/bash", "-c"]
+>
+> # RUN 명령 실행
+> RUN echo hello
+> ```
+> - SHELL 명령을 지정하지 않을 경우 Linux의 기본 쉘 ["bin/bash", "-c"], Windows는 ["cmd", "/S", "/C"]가 지정된다.
