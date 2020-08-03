@@ -69,7 +69,12 @@
   - [Dockerfile 만들기](#Dockerfile-만들기)
   - [Docker 이미지빌드](#Docker-이미지빌드)
   - [Docker 컨테이너 시작](#Docker-컨테이너-시작)
-
+- [5.4 명령 및 데몬 실행](#5.4-명령-및-데몬-실행)
+  - [데몬 실행(CMD 명령)](#데몬-실행(CMD-명령))
+  - [데몬 실행(ENTRYPOINT 명령)](#데몬-실행(ENTRYPOINT-명령))
+  - [빌드 완료 후에 실행되는 명령 (ONBUILD 명령)](#빌드-완료-후에-실행되는-명령-(ONBUILD-명령))
+  - [시스템 콜 시그널의 설정(STOPSIGNAL 명령)](#시스템-콜-시그널의-설정(STOPSIGNAL-명령))
+  - [컨테이너 헬스 체크 명령(HEALTHCHECK 명령)](#컨테이너-헬스-체크-명령(HEALTHCHECK-명령))
 
 2.1 컨테이너 기술의 개요
 ==========
@@ -641,6 +646,7 @@
 > Hola asa
 > ```
 > - 제품 환경용으로 만든 저용량 이미지인 'greet'만으로 작동한다.
+
 5.4 명령 및 데몬 실행
 =====
 > Dockerfile에서 명령이나 데몬을 실행하는 방법에 대해.
@@ -745,4 +751,79 @@
 > $ docker container run -it sample <CMD 명령에서 지정한 10초 간격으로 갱신하는 경우>
 > $ 
 > $ docker container run -it sample -d 2 <2초 간격으로 갱신하는 경우>
+> ```
+#### 빌드 완료 후에 실행되는 명령 (ONBUILD 명령)
+> ONBUILD 명령은 그 다음 빌드에서 실행할 명령을 이미지 않에 설정하기 위한 명령.
+> 예를 들어 Dockerfile에 ONBUILD 명령을 사용하여 어떤 명령을 실행하도록 설정하여 빌드하고 이미지를 작성, 그리고 그 이미지를 다른 Dockerfile에서 베이스 이미지로 설정하여 빌드했을 때 ONBUILD 명령에서 지정한 명령을 실행시킬 수 있다.
+> ```
+> # ONBUILD [실행하고 싶은 명령]
+> ```
+> - ONBUILD 명령은 자신의 Dockerfile로부터 생성한 이미지를 베이스 이미지로 한 다른 Dockerfile을 빌드할 때 실행하고 싶은 명령을 기술한다.  
+> -  **명령운영의 예**: 웹 시스템을 구축할 때 OS 설치 및 환경 설정이나 웹 서버 설치 및 각종 플러그인 설치 등과 같은 인프라 환경 구축과 관련된 베이스 이미지로 작성
+>
+> - [smaple source](./sample_code/onbuild)
+> ##### Step1 베이스 이미지 작성
+> ```
+> # 베이스 이미지 설정
+> # 먼저 buntu:17.10을 베이스 이미지로 하여 웹서버의 실행 환경을 작성
+> FROM ubuntu:17.10
+> 
+> # Nginx 설치
+> RUN apt-get -y update && apt-get -y upgrade
+> RUN gpt-get -y install nginx
+>
+> # 포트 지정
+> EXPOSE 80
+>
+> # 웹 콘텐츠 배치
+> ONBUILD ADD website.tar /var/www/html/
+>
+> # Nginx 실행
+> # 데몬을 실행하도록 CMD 명령을 지정
+> CMD ["nginx", "-g", "daemon off;"]
+> ```
+> - Dockerfile.base라는 이름으로 저장
+> - docker build 명령을 사용하여 파일명을 지정할 때는 -f 옵션 다음에 파일명을 지정한다.
+>
+> ![Dockerfile_ONBUILD01.png](./images/Dockerfile_ONBUILD01.png)
+> ##### Step2 웹콘텐스 개발
+> - 웹 서버를 작동시키기 위한 인프라 실행 환경이 완성.
+> - 그 다음은 웹 콘텐츠를 구축한다.
+> - [smaple source](./sample_code/onbuild)에 있는 tar 사용
+> ##### Step3 웹 서버용 이미지 작성
+> - 그 다음은 웹 서버 실행용 이미지를 작성. 이 이미지에는 베이스 이미지에서 지정한(web-base) 베이스 이미지를 FROM 명령으로 지정한다.
+> ```
+> # Docker 이미지 취득
+> FROM web-base
+> ```
+> - Dockerfile을 빌드하면 ONBUILD 명령에서 지정한 웹 콘텐츠를 이미지에 추가하는 처리가 실행되므로 **website.tar** 파일은 같은 폴더 위치에 구성해야한다.
+>
+> ![Dockerfile_ONBUILD02.png](./images/Dockerfile_ONBUILD02.png)
+> - photoview-image라는 이름의 이미지가 생성된다.
+> ##### Step4 웹 서버용 컨테이너 시작
+> [Step1](#Step1)에서 웹 서버를 작동시키기 위한 실행 환경과 [Step2](#Step2)에서 웹 콘텐츠의 전개가 되었으므로 생성된 이미지를 바탕으로 컨테이너를 시작.
+> ```bash
+> $ docker container run -d -p 80:80 photoview-image
+> ```
+> - http://localhost/로 엑세스하면 애플리케이션이 전개 된다.
+> 
+> ```bash
+> $ docker image inspect --format="{{ .Config.OnBuild }}" web-base <ONBUILD 명령이 설정되어 있는지 아닌지 확인하는 명령어>
+> ```
+>
+> ![Dockerfile_ONBUILD사용예.png](./images/Dockerfile_ONBUILD사용예.png)
+#### 시스템 콜 시그널의 설정(STOPSIGNAL 명령)
+> 컨테이너를 종료할 때에 송신하는 시그널을 설정할 때 사용하는 명령
+> ```
+> STOPSIGNAL [시그널]
+> ```
+#### 컨테이너 헬스 체크 명령(HEALTHCHECK 명령)
+> 컨테이너 안의 프로세스가 정상적으로 작동하고 있는지 체크할 때 사용하는 명령
+> ```
+> HEALTHCHECK [옵션] CMD 실행할 명령
+> ```
+>
+> ![Dockerfile_HEALTHCHECK01.png](./images/Dockerfile_HEALTHCHECK01.png)
+> ```
+> HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost/ || exit 1 <5분마다 가동중인 웹 서버의 메인 페이지(http://localhost/)를 3초 안에 표시할 수 있는지 없는지 확인>
 > ```
