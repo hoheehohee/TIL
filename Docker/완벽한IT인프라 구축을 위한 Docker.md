@@ -3,27 +3,27 @@
 - [2.1 컨테이너 기술의 개요](#2.1-컨테이너-기술의-개요)  
   - [컨테이너](#컨테이너)
 - [2.2 Docker 개요](#2.2-Docker-개요)
-  - [프로그래머에게 Docker란?](#프로그래머에게-Docker란?)
-- [2.3 Docker의 기능](#2.3-Docker의-기능)
-  - [Docker 이미지를 만드는 기능 (Build)](#Docker-이미지를-만드는-기능-(Build))
-  - [Docker 이미지를 공유하는 기능 (Ship)](#Docker-이미지를-공유하는-기능-(Ship))
+  - [프로그래머에게 Docker란?](#프로그래머에게-docker란?)
+- [2.3 Docker의 기능](#2.3-docker의-기능)
+  - [Docker 이미지를 만드는 기능 (Build)](#Docker-이미지를-만드는-기능-(build))
+  - [Docker 이미지를 공유하는 기능 (Ship)](#Docker-이미지를-공유하는-기능-(ship))
   - [Docker 컴포넌트](#Docker-컴포넌트)
-- [4.1 Docker 이미지 조작 명령어](#4.1-Docker-이미지-조작-명령어)
-  - [Docker 버전 확인](#Docker-버전-확인)
-  - [Docker 실행 환경 확인](#Docker-실행-환경-확인)
-  - [Docker 디스크 이용 상황](#Docker-디스크-이용-상황)
-  - [Docker 이미지 다운로드](#Docker-이미지-다운로드)
-  - [Docker 이미지 확인](#Docker-이미지-확인)
+- [4.1 Docker 이미지 조작 명령어](#4.1-docker-이미지-조작-명령어)
+  - [Docker 버전 확인](#docker-버전-확인)
+  - [Docker 실행 환경 확인](#docker-실행-환경-확인)
+  - [Docker 디스크 이용 상황](#docker-디스크-이용-상황)
+  - [Docker 이미지 다운로드](#docker-이미지-다운로드)
+  - [Docker 이미지 확인](#docker-이미지-확인)
   - [이미지 상세 정보 확인](#이미지-상세-정보-확인)
   - [이미지 태그 설정](#이미지-태그-설정)
   - [이미지 검색 ](#이미지-검색-)
   - [이미지 삭제](#이미지-삭제)
-  - [사용하지 않은 Docker 이미지를 전체 삭제 ](#사용하지-않은-Docker-이미지를-전체-삭제)
-  - [Docker Hub에 로그인](#Docker-Hub에-로그인)
-  - [Docker Hub 로그아웃](#Docker-Hub-로그아웃)
+  - [사용하지 않은 Docker 이미지를 전체 삭제 ](#사용하지-않은-docker-이미지를-전체-삭제)
+  - [Docker Hub에 로그인](#docker-hub에-로그인)
+  - [Docker Hub 로그아웃](#docker-hub-로그아웃)
   - [이미지 업로드](#이미지-업로드)
-- [4.2 Docker 컨테이너 생성/시작/정지](#4.2-Docker-컨테이너-생성/시작/정지)
-  - [Docker 컨테이너의 라이플 사이클](#Docker-컨테이너의-라이플-사이클)
+- [4.2 Docker 컨테이너 생성/시작/정지](#4.2-docker-컨테이너-생성/시작/정지)
+  - [Docker 컨테이너의 라이플 사이클](#docker-컨테이너의-라이플-사이클)
   - [컨테이너를 조학하기 위한 기본 명령어 네 가지.](#컨테이너를-조학하기-위한-기본-명령어-네-가지.)
   - [컨테이너 생성 및 시작](#컨테이너-생성-및-시작)
   - [컨테이너 백그라운드 실행](#컨테이너-백그라운드-실행)
@@ -37,13 +37,13 @@
   - [컨테이너 재시작](#컨테이너-재시작)
   - [컨테이너 삭제](#컨테이너-삭제)
   - [컨테이너 중단/재개](#컨테이너-중단/재개)
-- [4.3 Docker 컨테이너 네트워크](#4.3-Docker-컨테이너-네트워크)
+- [4.3 Docker 컨테이너 네트워크](#4.3-docker-컨테이너-네트워크)
   - [네트워크 목록 표시](#네트워크-목록-표시)
   - [네트워크 작성](#네트워크-작성)
   - [네트워크 연결](#네트워크-연결)
   - [네트워크 상세 정보 확인](#네트워크-상세-정보-확인)
   - [네트워크 삭제](#네트워크-삭제)
-- [4.4 가동중인 Docker 컨테이너 조작](#4.4-가동중인-Docker-컨테이너-조작)
+- [4.4 가동중인 Docker 컨테이너 조작](#4.4-가동중인-docker-컨테이너-조작)
   - [가동 컨테이너 연결](#가동-컨테이너-연결)
   - [가동 컨테이너에서 프로세스 실행 ](#가동-컨테이너에서-프로세스-실행)
   - [가동 컨테이너의 프로세스 확인 ](#가동-컨테이너의-프로세스-확인)
@@ -51,31 +51,31 @@
   - [컨테이너 이름 변경](#컨테이너-이름-변경)
   - [컨테이너 안의 파일을 복사](#컨테이너-안의-파일을-복사)
   - [컨테이너 조작의 차분 확인](#컨테이너-조작의-차분-확인)
-- [4.5 Docker 이미지 생성](#4.5-Docker-이미지-생성)
+- [4.5 Docker 이미지 생성](#4.5-docker-이미지-생성)
   - [컨테이너부터 이미지 작성](#컨테이너부터-이미지-작성)
   - [컨테이너를 tar파일로 출력](#컨테이너를-tar파일로-출력)
   - [tar 파일로부터 이미지 작성](#tar-파일로부터-이미지-작성)
   - [이미지 저장](#이미지-저장)
   - [이미지 읽어 들이기](#이미지-읽어-들이기)
   - [불필요한 이미지/컨테이너를 일괄 삭제](#불필요한-이미지/컨테이너를-일괄-삭제)
-- [5.1 Dockerfile를 사용한 구성 관리](#5.1-Dockerfile를-사용한-구성-관리)
-  - [Dockerfile이란?](#Dockerfile이란?)
-  - [Dockerfile의 기본 구문](#Dockerfile의-기본-구문)
-  - [Dockerfile 작성](#Dockerfile-작성)
-- [5.2 Dockerfile의 빌드와 이미지 레이어](#5.2-Dockerfile의-빌드와-이미지-레이어)
-  - [Dockerfile로부터 Docker 이미지 만들기](#Dockerfile로부터-Docker-이미지-만들기)
-  - [Docker 이미지의 레이어 구조](#Docker-이미지의-레이어-구조)
+- [5.1 Dockerfile를 사용한 구성 관리](#5.1-dockerfile를-사용한-구성-관리)
+  - [Dockerfile이란?](#dockerfile이란?)
+  - [Dockerfile의 기본 구문](#dockerfile의-기본-구문)
+  - [Dockerfile 작성](#dockerfile-작성)
+- [5.2 Dockerfile의 빌드와 이미지 레이어](#5.2-dockerfile의-빌드와-이미지-레이어)
+  - [Dockerfile로부터 Docker 이미지 만들기](#dockerfile로부터-docker-이미지-만들기)
+  - [Docker 이미지의 레이어 구조](#docker-이미지의-레이어-구조)
 - [5.3 멀티스테이지 빌드를 사용한 애플리케이션 개발](#5.3-멀티스테이지-빌드를-사용한-애플리케이션-개발)
-  - [Dockerfile 만들기](#Dockerfile-만들기)
-  - [Docker 이미지빌드](#Docker-이미지빌드)
-  - [Docker 컨테이너 시작](#Docker-컨테이너-시작)
+  - [Dockerfile 만들기](#dockerfile-만들기)
+  - [Docker 이미지빌드](#docker-이미지빌드)
+  - [Docker 컨테이너 시작](#docker-컨테이너-시작)
 - [5.4 명령 및 데몬 실행](#5.4-명령-및-데몬-실행)
-  - [명령 실행(RUN 명령)](#명령-실행(RUN-명령))
-  - [데몬 실행(CMD 명령)](#데몬-실행(CMD-명령))
-  - [데몬 실행(ENTRYPOINT 명령)](#데몬-실행(ENTRYPOINT-명령))
-  - [빌드 완료 후에 실행되는 명령 (ONBUILD 명령)](#빌드-완료-후에-실행되는-명령-(ONBUILD-명령))
-  - [시스템 콜 시그널의 설정(STOPSIGNAL 명령)](#시스템-콜-시그널의-설정(STOPSIGNAL-명령))
-  - [컨테이너 헬스 체크 명령(HEALTHCHECK 명령)](#컨테이너-헬스-체크-명령(HEALTHCHECK-명령))
+  - [명령 실행(RUN 명령)](#명령-실행(run-명령))
+  - [데몬 실행(CMD 명령)](#데몬-실행(cmd-명령))
+  - [데몬 실행(ENTRYPOINT 명령)](#데몬-실행(entrypoint-명령))
+  - [빌드 완료 후에 실행되는 명령 (ONBUILD 명령)](#빌드-완료-후에-실행되는-명령-(onbuild-명령))
+  - [시스템 콜 시그널의 설정(STOPSIGNAL 명령)](#시스템-콜-시그널의-설정(stopsignal-명령))
+  - [컨테이너 헬스 체크 명령(HEALTHCHECK 명령)](#컨테이너-헬스-체크-명령(healthcheck-명령))
 
 2.1 컨테이너 기술의 개요
 ==========
@@ -828,3 +828,67 @@
 > ```
 > HEALTHCHECK --interval=5m --timeout=3s CMD curl -f http://localhost/ || exit 1 <5분마다 가동중인 웹 서버의 메인 페이지(http://localhost/)를 3초 안에 표시할 수 있는지 없는지 확인>
 > ```
+
+5.5 환경 및 네트워크 설정
+=====
+> Dockerfile 안에서 이용할 수 있는 환경변수나 컨테이너 안에서의 작업 디렉토리를 지정할 수 있다.
+#### 환경변수 설정 (ENV 명령)
+> Dockerfile 안에서 환경변수를 설정하고 싶을 때 사용
+> ```
+> # ENV [key] [value]
+> # ENV [key]=[value]
+> ```
+> 환경변수를 지정하는 두 가지 방법
+> 1. key value 형으로 지정하는 경우
+> - 단일 환경변수에 하나의 값을 설정한다.
+> - 첫 번째 공백 앞을 key로 설정하면 그 이후는 모두 문자열로 취급한다.
+> - 공백이나 따옴표와 같은 문자를 포함한 것도 문자로 취급한다.
+>
+> ![Dockerfile_ENV01.png](./images/Dockerfile_ENV01.png)
+> ```
+> ENV myName "Shiho ASA"
+> ENV myOrder Gin Whisky Calvados
+> ENV MyNickName miya
+> ```
+> - 이 예에서는 ENV 명령이 3줄에 걸쳐 있으므로 3개의 Docker 이미지를 겹쳐서 만들게 된다.
+> 2. key=value로 지정하는 경우
+> - 한 번에 여러 개의 값을 설정할 Eo
+> ```
+> ENV myName="Shiho ASA" \
+>     myOrder=Gin\ Whisky\ Calvados \
+>     MyNickName=miya
+> ```
+> - 하나의 ENV 명령으로 여러 개의 값을 설정하므로 만들어진 Docker 이미지는 하나이다.
+> - 변수 앞에 \를 추가하면 이스케이프 처리를 할 수 있다. 예를 들어 \$myName은 $myName이라는 리터널로 치환할 수있다.
+> 
+> ENV 명령으로 지정한 환경변수는 컨테이너 실행 시의 docker container run 명령의 --env 옵션을 사용하여 변경 가능
+#### 작업 디렉토리 지정 (WORKDIR 명령)
+> Dockerfile에서 정의한 명령을 실행하기 위한 작업용 디렉토리를 지정할 때 사용
+> ```
+> WORKDIR [작업 디렉토리 경로]
+> ```
+> - WORKDIR 명령은 Dockerfile에 쓰여 있는 다름과 같은 명령을 실행하기 위한 작업용 디렉토리를 지정
+>   - RUN 명령
+>   - CMD 명령
+>   - ENTRYPOINT 명령
+>   - COPY 명령
+>   - ADD 명령
+> - 만일 지정한 디렉토리가 존재하지 않으면 새로 작성.
+> - WORKDIR 명령은 Dockerfile 안에서 여러 번 사용 가능.
+> - 상대 경로를 지정한 경우는 이전 WORKDIR 명령의 경로에 대한 상대 경로가 된다.  
+>
+>   ```
+>   WORKDIR /first
+>   WORKDIR second
+>   WORKDIR third
+>   RUN ["pwd"]
+>   ```
+>   - 마지막 줄 실행 후 **/first/second/third**가 출력
+> - WORKDIR 명령에는 ENV 명령에서 지정한 환경변수를 사용할 수 있다.
+>
+>   ```
+>   ENV DIRPATH /first
+>   ENV DIRNAME second
+>   WORKDIR $DIRPATH/$DIRNAME
+>   RUN ["pwd"]
+>   ```
