@@ -78,3 +78,10 @@ ReactJS의 다른 component사이에 복잡한 components 구조를 나누는 �
 ![image](https://miro.medium.com/max/700/0*w-QLTAF5W7i42jZs.png)
 
 ## 5. Container components
+반면에 Container components에는 state를 설정하는 로직이 있거나 parent component까지 이벤트를 내보내는 기능이 있습니다.  
+일전적인 규칙은 Single Responsibility Principle(단일 책임 원칙)을 염두에두고 component를 최대한 단순하게 유지하는것이 좋습니다. 이는 본질적으로 component가 한 가지를 일을 해야하며 잘 해야한다는 뜻입니다.  
+대부분의 경우 이러한 유형의 components는 몇 가지 presentational(표현) components를 수용하는 HOC입니다. Presentational components를 간단한 component로 작성하면 전체 응용 프로그램의 복잡성을 줄일 수 있습니다. 여기서 Presentational component들이 작용합니다. 이러한 component에는 최소한의 로직이 있어야합니다.  
+Presentational components는 데이터를 받아들이고 Props의 일부로 수신하는 callback event를 내보냅니다. 기본적으로 이러한 유형의 component는 UI를 렌더링하고 UI에서 일부 작업이 발생할 때 전달 된 함수를 실행합니다.  
+기본적으로 이러한 유형의 component는 UI를 렌더링하고 UI에서 일부 작업이 발생할 때 전달 된 함수를 실행합니다. 이러한 유형의 component는 building block(빌딩 블록)이며 때때로  Lower-Order Component(하위 구성 요소) (또는 LOC)라고도 합니다.
+
+## 6. Best Practices List
