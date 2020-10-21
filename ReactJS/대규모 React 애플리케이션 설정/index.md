@@ -13,7 +13,7 @@
 - component를 찾고 싶지만 이름이 기억 나지 않을 때 어떻게합니까?
 
 다음은 Karify에서 front-end를 재구축하는 동안 발생한 질문의 몇 가지 예입니다.  
-우리는 dependencies와 component의 수가 결국 감당할 수 없을 정도로 증가하 것이라는 것을 할고 있었습니다. 즉, 향후 개발을 따라갈 수있을 만큼 확장 가능한 계획이 필요했습니다.  
+우리는 dependencies와 component의 수가 결국 감당할 수 없을 정도로 증가하 것이라는 것을 알고 있었습니다. 즉, 향후 개발을 따라갈 수 있을 만큼 확장 가능한 계획이 필요했습니다.  
 이 계획에는 파일 및 폴더 구조, 코드 품질에 대한 규칙 정의와 전체 아키텍처 정의가 포함되었습니다.  
 가장 중요한 것은 이 모든 것이 새로운 개발자들이 우리의 모든 의존성과 코드 스타일에 대한 많은 통찰력을 요구하지 않고 쉽게 이해할 수 있어야 한다는 것이다.
 
@@ -35,10 +35,39 @@ root package.json에서 다음 구성으로 yarn workspaces을 사용하여 mono
 
 ```
 "workspaces": [
-    "app/*",
-    "lib/*",
-    "tool/*"
+  "app/*",
+  "lib/*",
+  "tool/*"
 ]
 ```
 
-Now some of you might wonder why we didn’t simply use a packages folder like in other monorepos.
+이제 여러분 중 일부는 왜 우리가 다른 monorepos에서 처럼 단순히 패키지 폴더를 사용하지 않았는지 궁금할 것입니다.  
+주로 우리는 applications과 component libray를 분리하고 싶었기 때문입니다. 그 외에도 우리는 우리 자신의 도구를 만들어야한다는 것도 알고있었습니다.  
+그래서 우리는 위에 보이는 폴더를 생각 해냈고 여기에 각각에 대한 설명이 있습니다.
+
+- app: 이 폴더의 모든 패키지는 Karify 프론트 엔드, internal(내부) 프론트 엔드 및 스토리북(Storybook)과 같은 프론트 엔드 애플리케이션을 참조합니다.
+- lib: 이 폴더의 모든 패키지는 공유 유틸리티를 프런트 엔드 애플리케이션에 노출하며 가능한 한 애플리케이션에 구애받지 않습니다. 이 패키지는 기본적으로 컴포넌트 라이브러리를 구성합니다. (예를 들면 typography, media 및 primitive package가 될 것입니다.)
+- tool: 이 폴더에있는 모든 패키지는 Node.js 전용이며 우리가 직접 만든 tool 또는 우리가 의존하는 tool에 대한 구성 및 유틸리티일 수 있다. 몇 가지 예는 웹팩 유틸리티, linter 구성 및 파일 시스템 linter입니다.
+
+어디에 배치하든 모든 패키지에는 항상 src 폴더가 있고 선택적으로 bin 폴더가 있습니다. 앱 및 lib 패키지의 src 폴더에는 다음 폴더 중 일부가 포함될 수 있습니다.
+
+- actions: redux 또는 useReducer에서 dispatch함수로 전달할 수 있는 ation creator함수를 포함합니다.
+- components: 각각의 definition(정의), translations(번역), 단위 테스트, 스냅샷 및 stories (해당되는 경우)가 있는 component 폴더를 포함합니다.
+- constants: 다른 환경과 다른 유틸리티에서 재사용되는 변함없는 값을 보유합니다.
+- fetch: API에서 payload에 대한 유형 정의 및 해당 payload 검색을 위한 각 비동기식 작업을 보유한다.
+- helpers: 다른 categorie에 해당하지 않는 유틸리티를 보유합니다.
+- reducers: redux 저장소 또는 useReducer에서 사용할 reducers를 포함합니다.
+- routers: react-router 컴포넌트 또는 history기능에 사용될 router정의를 보유합니다
+- selectors: redux state 또는 API payload에서 데이터를 읽거나 변환하는 helper함수를 포함합니다.
+
+이 폴더 구조를 사용하면 dependencies에 의해 정의된 서로 다른 개념 간의 우려 사항을 명확하게 구분하므로 모듈식 코드를 작성할 수 있습니다. 이는 우리가 존재 여부를 아는 것과 관계없이 리포지토리에 variables, functions 또는 components의 존재 여부 파악하는데 도움이됩니다. 또한 이러한 폴더의 구조를 최소한으로 유지하는데 도움이되므로 처리가 더 쉬워집니다.
+
+이 새로운 폴더 구조의 한 가지 과제는 우리가 그것을 고수하는지 확인하는 것입니다.  
+서로 다른 패키지에 서로 다른 폴더를 만들고 파일을 서로 다르게 구성하고 싶을 것입니다. 이것이 항상 나쁜 생각은 아니지만 일관되게하지 않으면 엉망이 될 것입니다. 이를 돕기 위해 다음 섹션에서 자세히 설명 할 file system linter를 만들었습니다.
+
+## How to enforce a style guide?
+
+일관된 파일 및 폴더 구조를 원했던 것과 마찬가지로 코드에서 가능한 한 일관성을 유지하기를 원했습니다.  이것은 우리가 이미 jQuery 프론트 엔드에서 꽤 잘 해낸 일이지만 특히 CSS에 관해서는 개선 될 수 있습니다.  
+따라서 처음부터 스타일 가이드를 정의하고 linter로 적용하려고했습니다. linter로 지정할 수 없는 규칙은 코드 검토 중에 적용됩니다.
+
+monorepo에서 linter를 설정하는 것은 다른 저장소에서와 동일합니다. 한 번 실행하여 전체 저장소의 유효성을 검사 할 수 있기 때문에 좋습니다.
