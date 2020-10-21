@@ -70,4 +70,31 @@ root package.json에서 다음 구성으로 yarn workspaces을 사용하여 mono
 일관된 파일 및 폴더 구조를 원했던 것과 마찬가지로 코드에서 가능한 한 일관성을 유지하기를 원했습니다.  이것은 우리가 이미 jQuery 프론트 엔드에서 꽤 잘 해낸 일이지만 특히 CSS에 관해서는 개선 될 수 있습니다.  
 따라서 처음부터 스타일 가이드를 정의하고 linter로 적용하려고했습니다. linter로 지정할 수 없는 규칙은 코드 검토 중에 적용됩니다.
 
-monorepo에서 linter를 설정하는 것은 다른 저장소에서와 동일합니다. 한 번 실행하여 전체 저장소의 유효성을 검사 할 수 있기 때문에 좋습니다.
+monorepo에서 linter를 설정하는 것은 다른 저장소에서와 동일합니다. 한 번 실행하여 전체 저장소의 유효성을 검사 할 수 있기 때문에 좋습니다.  
+linter에 익숙하지 않다면 우리가 사용하는 ESLint와 Stylelint를 살펴 보는 것이 좋습니다.
+
+JavaScript linter가 있다는 것은 다음과 같은 사용 사례에 특히 유용합니다.
+
+- HTML 대응 요소에 대한 접근성 component사용 적용: 디자인 과정에서 anchors, buttons, images 및 icon에 대한 몇가지 접근성 지침을 정의했습니다. 그런 다음 코드에서 이러한 지침을 구현하고 앞으로도 이를 잊지 않도록하기를 원했습니다. [eslint-plugin-react](https://github.com/yannickcr/eslint-plugin-react)의 [react/forbid-elements](https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/forbid-elements.md) 규칙으로이 작업을 수행했습니다. 어떻게 생겼는지의 예:
+
+```
+'react/forbid-elements': [
+    'error',
+    {
+        forbid: [
+            {
+                element: 'img',
+                message: 'Use "<Image>" instead. This is important for accessibility reasons.',
+            },
+        ],
+    },
+],
+```
+
+- 라이브러리 패키지 내부에서 애플리케이션 패키지 import 금지 및 다른 애플리케이션 내부에서 애플리케이션 패키지 import 금지: 주로 monorepo에서 패키지 간의 순환 종속성을 피하고 우리가 만든 관심 사항의 분리에 충실하도록합니다. [eslint-plugin-import](https://github.com/benmosher/eslint-plugin-import)의 [import/no-restricted-paths](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-restricted-paths.md) 규칙으로이를 금지합니다.
+
+JavaScript 및 CSS linting 외에도 자체 파일 시스템 linter가 있습니다. 이것이 우리가 폴더 구조를 고수하는 방법입니다.  
+이 linter는 우리 것이므로 구조를 변경하기로 결정하면 언제든지 변경할 수 있습니다. 다음은 우리가 가지고있는 규칙의 몇 가지 예입니다.
+
+- component 폴더의 구조를 확인: 항상 폴더와 이름이 같은 index.ts 및 .tsx 파일이 있는지 확인합니다.
+- package.json 파일 유효성 검사: 우발적으로 패키지를 게시하지 않도록 항상 패키지 당 하나가 있고 비공개로 설정되어 있는지 확인하십시오.
