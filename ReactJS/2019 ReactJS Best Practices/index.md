@@ -117,3 +117,5 @@ Redux-Thunk와 같은 이벤트 동기화기를 언급했습니다. ReactJS v16.
 
 ## 7. Conclusion
 이 기사가 2019 년에 매우 인기있는 ReactJS 모범 사례와 패턴에 대한 정보를 제공하기를 바랍니다.
+
+https://medium.com/@konstankino/2019-reactjs-best-practices-design-patterns-516e1c3ca06a
