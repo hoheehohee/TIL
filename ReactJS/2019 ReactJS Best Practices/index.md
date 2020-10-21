@@ -1,6 +1,6 @@
 # 2019 ReactJS Best Practices: 2019 ReactJS 모범사례
 
-## What?
+## 1. What?
 - 왜 ReactJS가 인기가 있는 이유는 무엇일까?
   - 함께 작업하기가 간단하기 때문이라고 생각합니다. 배우기 쉽고(물론 JSX,Redux, mobx등의 추가 라이브러리의 러닝커브가 있지만) 가상 DOM을 사용하여 성능에 최적화되어 있습니다.
   - 가상 DOM을 구현함으로써 ReactJS는 업데이트가 필요한 요소만 빠르게 re-render 할 수있는 방법을 렌더링 엔진이 제공합니다.
@@ -18,7 +18,7 @@ ReactJS는 모든 component들을 하나의 buket으로 수집하고 가상 DOM�
 
 component와 component가 아닌것을 명확히게 설명하는 것으로 시작하겠습니다. component는 self-sufficient(자급자족)하고 UI의 독집적인 부분입니다. 각 component는 state와 API가 있는 다른 component를 포함할 수 있습니다. 관례적으로 component관련 코드를 하나의 특정 폴더안에 보관해야합니다. 각 component의 모든 파일을 단일 폴더에 보관하면 재사용 가능한 component를 만들어 다른 앱에서 사용할 수 있습니다.
 
-## ReactJS components의 유형(Types of ReactJS components)
+## 2. ReactJS components의 유형(Types of ReactJS components)
 ReactJS 컴포넌트에는 네 가지 주요 유형이 있습니다.
 1. State-full or class-based components
 2. State-less or function-based components
@@ -26,7 +26,7 @@ ReactJS 컴포넌트에는 네 가지 주요 유형이 있습니다.
 4. Container components
 
 ![image](https://miro.medium.com/max/500/1*p1Ej4slk27NuCISlt0EcYA.png)
-component tree 구조
+  component tree 구조
 
 ### State-full components or class-based components
 State-full components는 state 및 state와 관련된 데이터가 있습니다. state 또는 props 객체를 통해 이러한 유형의 component 내부에 데이터를 전달할 수 있습니다. State-full components는 일부 데이터를 유지하고 앱의 global state를 변경할 수 있으므로 support하기가 더 어렵습니다. 또한 state-full components는 대부분 생성자가있는 클래스 기반 구성 요소입니다.(생성자에서 component의 state를 설정하는 것이 모범 사례로 간주)
@@ -43,6 +43,38 @@ state는 component에 노출되는 개체(object)입니다. State scope(상태�
 두 번째의 경우에는 그것은 단지 syntactic sugar, transpiler(예: Babel)는 state property(속성) 선언을 내부적으로 생성자로 바꿀 것입니다. State-less components or function-based components에 대한 React Hooks은 단순 Javascript 함수입니다. 함수 기반 component는 ReactJS element(요소) 또는 collection(컬렉션)을 반환하며, 이는 <> ... </>와 같은 'partial component(부분적 component)' 이거나 logic(로직) 및 임베디드 component가 있는 완전한 기능기반의 components입니다.
 function-base component에서 생성자를 사용할 수 없기 때문에 (ReactJS v16.8 이후로 실제로 사용합니다) components를 state-full로 만들 수 없습니다. 이러한 유형의 components에서 데이터를 유지할 수 없기 때문에 state-less 방법으로 저장합니다. 대부분의 경우 UI를 렌더링하기 위해 function-based component에 props을 전달합니다.
 
-다음은 state-less, function-based 기반 ReactJS 구성 요소의 예입니다.
+다음은 state-less, function-based 기반 ReactJS component의 예입니다.
 
 ![image](https://miro.medium.com/max/700/0*UjwffjIGdUgC7F6D.png)
+
+성능관점에서 보면 class-based components를 사용하는 것과 function-based components를 사용하는 것 사이에는 거의 차이가 없습니다. 
+ReactJS 렌더링 메커니즘은 우리를 위해 최적화 할만큼 똑똑합니다.
+
+function-based components는 작업하기 쉽고 테스트하기 더 편리합니다. 
+이것이 ReactJS 개발자 커뮤니티가 class-based components 대신 function-based components를 작성하도록 유도하는 이유입니다. 
+state-less function-based components에는 몇 가지 제한 사항이 있으며 기본적으로 state를 관리하기 위한 하나의 전역 위치(global place)가 있어야합니다. 이는 컴포넌트 작성의 ReactJS 패러다임과 다릅니다 (자세한 내용은 아래 참조).
+
+개발자가 state-full, function-based components를 작성하는 동시에 state 및 component life-cycle methods를 사용할 수 있는 기능을 제공하기 위해 React v16.8은 React Hooks라는 새로운 기능을 추가했습니다.
+
+본질적으로 React Hooks는 class-based components를 제거하려는 시도입니다. 
+React Hooks를 사용하면 class를 사용하지 않고도 state-full function-based를 작성할 수 있습니다. 아마도 우리는 앞으로 어느 시점에서 Hooks로 제거 된 class-based components를 보게 될 것입니다.
+
+React Hooks는 클래스로 선언되었지만 생성자가 없거나 필요하지 않은 컴포넌트를 피함으로써 애플리케이션 디자인을 단순화하는 것을 목표로합니다. 앱의 이상적인 디자인을 생각하면 대부분 state-less components로 작업합니다. 클라이언트용 ReactJS 앱을 빌드 할 때 일반적으로 컴포넌트 표현과 애플리케이션 로직 사이에 얇은 레이어를 사용합니다. 이를 통해 컴포넌트의 시각적 표현과 동작을 분리 할 수 ​​있습니다.
+
+## 3. Data-Down, Actions-Up
+«Data Down, Actions Up»디자인 패턴은 무엇입니까? 본질적으로 이는 'props'의 데이터를 받아들이고 해당 데이터를 뷰 또는 nested(중첩) components로 전달하는 Higher-Order Component (HOC-아래 설명 참조)가 있음을 의미합니다.  
+components와 interact(상호작용)하기 위해 사용자는 버튼 누르기와 같은 작업을 트리거(trigger)하고 component는 이벤트를 생성하여 해당 interact(상호작용)에 응답합니다. 즉, 데이터가 전달 된 방식과 반대 방향으로 이벤트를 트리거합니다.
+
+이러한 이벤트 또는 작업은 parent component로 전달됩니다. parent component는 global application state를 변경하는 다른 작업을 트리거(trigger)합니다.
+
+## 4. Higher-Order Component(HOC)  
+Higher-Order Component(또는 HOC)는 기본적으로 데코레이터 패턴(Decorator Pattern)이라고도하는 디자인 패턴입니다.  
+ReactJS에서 HOC는 추가 기능이나 추가 속성을 추가하여 다른 component를 감싸는 component입니다. 이를 통해 일반적으로 사용되는 일부 로직(logic)에서 abstraction(추상화)를 허용하고 코드를 DRY로 유지합니다.  
+ReactJS의 다른 component사이에 복잡한 components 구조를 나누는 방법이며 애플리케이션 로직과 UI를 분리하는 방법입니다.  
+예를 들어, 프레젠테이션용 Button component에 대한 HOC로 컨테이너 component를 사용할 수 있습니다.
+
+다음은 HOC ReactJS 구성 요소의 예입니다.
+
+![image](https://miro.medium.com/max/700/0*w-QLTAF5W7i42jZs.png)
+
+## 5. Container components
