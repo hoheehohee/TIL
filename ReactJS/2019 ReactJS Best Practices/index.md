@@ -84,4 +84,36 @@ ReactJS의 다른 component사이에 복잡한 components 구조를 나누는 �
 Presentational components는 데이터를 받아들이고 Props의 일부로 수신하는 callback event를 내보냅니다. 기본적으로 이러한 유형의 component는 UI를 렌더링하고 UI에서 일부 작업이 발생할 때 전달 된 함수를 실행합니다.  
 기본적으로 이러한 유형의 component는 UI를 렌더링하고 UI에서 일부 작업이 발생할 때 전달 된 함수를 실행합니다. 이러한 유형의 component는 building block(빌딩 블록)이며 때때로  Lower-Order Component(하위 구성 요소) (또는 LOC)라고도 합니다.
 
-## 6. Best Practices List
+## 6. Best Practices List (모범 사례 목록)
+- ReduxJS를 사용할 때 Reducer 코드를 더 작은 메서드로 분할하여 Reducer 내에서 거대한 JSON을 피하십시오.
+- 아직 사용하지 않은 경우 앱에서 TypeScript를 사용하는 것이 좋습니다.
+- create-react-app 생성기를 사용하여 ReactJS 앱을 부트스트랩 합니다.
+- 코드를 DIY하게 유지하십시오. 반복하지 마세요. 하지만 코드 중복이 항상 나쁜 것은 아닙니다.
+- Reducer를 포함하여 large classes, 메서드 또는 components를 사용하지 마십시오.
+- 더 robust managers(강력한 관리자)를 사용하여 Redux와 같은 애플리케이션 State를 관리합니다.
+- 백엔드 API와의 상호 작용을 위해 Redux-Thunk와 같은 이벤트 동기화기를 사용하십시오.
+- 너무 많은 attributes(속성)이나 agruments(인수)를 전달하지 마십시오. 컴포넌트에 전달하는 Props을 5개로 제한하십시오.
+- ReactJS defaultProps 및 ReactJS propTypes를 사용하십시오.
+- linter를 사용하고 너무 긴 줄을 끊습니다.
+- 고유 한 jslint 구성 파일을 유지하십시오.
+- 항상 NPM 또는 yarn과 같은 lock file과 함께 dependency manager를 사용하십시오.
+- 일반적으로 accessed하는 코드, 복잡하고 버그가 발생하기 쉬운 코드를 테스트합니다.
+- 약간의 노력으로 코드에 대해 더 많은 테스트 범위를 제공하는 더 많은 테스트를 작성하고 코드가 제대로 작동하는지 테스트하십시오.
+- 버그를 찾을 때마다 먼저 테스트를 작성해야합니다.
+- state-full components를 만드는 새로운 ReactJS 방식인 React Hooks를 사용하여 function-based components를 사용하십시오.
+- Props에 ES6 de-structuring를 사용하십시오.
+- conditional rendering(조건부 렌더링)을 사용합니다.
+- component collection를 collect(수집)하고 렌더링하려면 "map()"을 사용하십시오.
+- "<>"…"</>"과 같은 부분 components를 사용
+- "handleClick()" 또는 "handleUpdate()"와 같은 핸들 접두사를 사용하여 이벤트 핸들러의 이름을 지정합니다.
+- onChange를 사용하여 "onChange={this.handleInputChange}"와 같은 입력을 제어하십시오.
+- JEST를 사용하여 ReactJS 코드를 테스트하십시오.
+
+Redux-Thunk와 같은 이벤트 동기화기를 언급했습니다. ReactJS v16.3은 React Context API라는 새로운 기능을 도입했습니다.
+
+다음은 defaultProps 및 propTypes를 사용하는 예입니다.
+
+![image](https://miro.medium.com/max/700/0*jRKmcUovWbWh9tkt.png)
+
+## 7. Conclusion
+이 기사가 2019 년에 매우 인기있는 ReactJS 모범 사례와 패턴에 대한 정보를 제공하기를 바랍니다.
