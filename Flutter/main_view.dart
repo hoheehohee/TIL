@@ -8,7 +8,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final _imageUrl = "https://monthlyart.com/wp-content/uploads/2020/07/Kukje-Gallery-Wook-kyung-Choi-Untitled-c.-1960s-34-x-40-cm.jpg";
-  final List<String> _items = ['전시 카테고리1', '전시 카테고리2', '전시 카테고리3', '전시 카테고리4', '전시 카테고리5'];
+  final List<String> _items = ['전시 카테고리1', '전시 카테고리2', '전시 카테고리3', '전시 카테고리4', '전시 카테고리5', '전시 카테고리6', '전시 카테고리7'];
   
   @override
   Widget build(BuildContext context) {
@@ -34,9 +34,52 @@ class MyApp extends StatelessWidget {
           appBar: AppBar(
             title: Text("코쟁이 박물관")
           ),
-          body: Container(
-            padding: EdgeInsets.all(10),
-            child: _mainWidget(),
+          body: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Container(
+                  padding: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  child: _mainWidget(),
+                ),
+              ),
+              Container(
+                height: 40,
+                decoration: BoxDecoration(
+                  border: Border(top: BorderSide(width: 1.5, color: Colors.grey))
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('자동전시 안내'),
+                        IconButton(
+                          icon: Icon(Icons.toggle_on_outlined),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('음성지원 안내'),
+                        IconButton(
+                          icon: Icon(Icons.toggle_on_outlined),
+                          onPressed: () {},
+                        )
+                      ],
+                    )
+                  ],
+                )
+              )
+              
+            ],
           ),
           drawer: _drawerWidget(),
           bottomNavigationBar: _bottomBar(),
@@ -117,7 +160,7 @@ class MyApp extends StatelessWidget {
             itemCount: _items.length,
             itemBuilder: (BuildContext context, int index) => Items(_items[index])
           ),
-        )
+        ),
       ],
     );
   }
@@ -156,9 +199,20 @@ class Items extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 50,
-      child: Text(title)
+    return InkWell(
+      child: Container(
+        height: 50,
+        margin: EdgeInsets.symmetric(vertical: 3),
+        padding: EdgeInsets.symmetric(horizontal: 5),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey)
+        ),
+        child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(title)
+        )
+      ),
+      onTap: () {},
     );
   }
 }
