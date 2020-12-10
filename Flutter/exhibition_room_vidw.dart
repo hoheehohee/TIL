@@ -73,6 +73,9 @@ class MyWidget extends StatelessWidget {
           ),
           Container(
             height: 80,
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(color: Colors.grey)),
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +97,8 @@ class MyWidget extends StatelessWidget {
           Expanded(
             flex: 1,
             child: _exhibitItem()
-          )
+          ),
+          
         ],
       )
     );
@@ -114,7 +118,7 @@ class MyWidget extends StatelessWidget {
   }
   
   Widget _exhibitItem() {
-    final List<String> _exhibitList = ['등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4', '등록전시물5', '등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4'];
+    final List<String> _exhibitList = ['등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4', '등록전시물5', '등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4', '등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4', '등록전시물5', '등록전시물1'];
     return ListView.builder(
       padding: EdgeInsets.only(bottom: 18),
       itemCount: _exhibitList.length,
@@ -126,9 +130,7 @@ class MyWidget extends StatelessWidget {
               height: 50,
               padding: EdgeInsets.only(left: 60, right: 20),
               decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: 1.2, color: Colors.grey)
-                )
+                border: Border(bottom: BorderSide(color: Colors.grey)),
               ),
               child:  Align(
                 alignment: Alignment.centerLeft,
