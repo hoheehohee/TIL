@@ -32,13 +32,14 @@ class MyApp extends StatelessWidget {
           leading: Builder(
             builder: (BuildContext context) => (
               IconButton(
-                icon: Icon(Icons.arrow_back_ios),
+                icon: Icon(Icons.close_outlined),
                 onPressed: () {}
               )
             )
           )
         ),
-        body: Center(
+        body: Container(
+          color: Colors.white,
           child: MyWidget(),
         ),
       ),
@@ -60,13 +61,39 @@ class MyWidget extends StatelessWidget {
           Container(
             height: 40,
             width: double.infinity,
-            color: Colors.white,
+            decoration: BoxDecoration(
+              border: Border(bottom: BorderSide(width: 1.5, color: Colors.grey.withOpacity(0.3)))
+            ),
             child: TabBar(
               isScrollable: true,
               unselectedLabelColor: Colors.black.withOpacity(0.3),
               indicatorColor: Colors.orange,
               tabs: _tabItems(context, _categoryList)
             )
+          ),
+          Container(
+            height: 80,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  width: 40,
+                  height: 40,
+                  margin: EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.orange,
+                    borderRadius: BorderRadius.all(Radius.circular(5))
+                  ),
+                  child: Center(child: Text('F4', style: TextStyle(color: Colors.white, fontSize: 18)))
+                ),
+                Text('전시 카테고리1', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: _exhibitItem()
           )
         ],
       )
@@ -79,10 +106,38 @@ class MyWidget extends StatelessWidget {
     
     for(var i = 0; i < _categoryList.length; i++) {
       items.add(
-        Center(child: Text(_categoryList[i], style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)))
+        Center(child: Text(_categoryList[i], style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)))
       );
     }
     
     return items;
+  }
+  
+  Widget _exhibitItem() {
+    final List<String> _exhibitList = ['등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4', '등록전시물5', '등록전시물1', '등록전시물2', '등록전시물3', '등록전시물4'];
+    return ListView.builder(
+      padding: EdgeInsets.only(bottom: 18),
+      itemCount: _exhibitList.length,
+      itemBuilder: (BuildContext context, int index) => (
+        Material( 
+          child: InkWell(
+            onTap: () {},
+            child: Container(
+              height: 50,
+              padding: EdgeInsets.only(left: 60, right: 20),
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(width: 1.2, color: Colors.grey)
+                )
+              ),
+              child:  Align(
+                alignment: Alignment.centerLeft,
+                child: Text(_exhibitList[index], style: TextStyle(fontSize: 16))
+              )
+            )
+          )
+        )
+      ),
+    );
   }
 }
