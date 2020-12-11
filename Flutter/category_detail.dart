@@ -110,17 +110,13 @@ class MyApp extends StatelessWidget {
                 Expanded(
                   flex: 1,
                   child: Row(
-//                     textDirection: TextDirection.rtl,
+                    textDirection: TextDirection.ltr,
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       IconButton(
-                         icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
-                         onPressed: () {},
-                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Container(
                             width: 60,
@@ -133,9 +129,13 @@ class MyApp extends StatelessWidget {
                             ),
                             child: Center(child: Text('1709', style: TextStyle(color: Colors.white, fontSize: 15)))
                           ),
-                          Text('등록 전시물2', style: TextStyle(color: Colors.white))
+                          Text('등록 전시물', style: TextStyle(color: Colors.white))
                         ]
-                      )
+                      ),
+                      IconButton(
+                         icon: Icon(Icons.arrow_forward_ios, color: Colors.white),
+                         onPressed: () {},
+                      ),
                     ]
                   )
                 )
@@ -294,7 +294,5 @@ class MyWidget extends StatelessWidget {
         )
       ],
     );
-  }
-  
-  
+  } 
 }
