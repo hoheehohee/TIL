@@ -53,6 +53,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MyWidget extends StatelessWidget {
+  
+  
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -135,6 +137,94 @@ class MyWidget extends StatelessWidget {
             ]
           )
         ),
+        Expanded(
+          child:ListView.builder(
+            itemCount: 10,
+            itemBuilder: (BuildContext context, int index) => (
+              Container(
+                height: 150,
+                width: double.infinity,
+                color: Colors.white,
+                margin: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(bottom: BorderSide(color: Colors.grey.withOpacity(0.3)))
+                      ),
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '20201224-174013', 
+                            style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w600)
+                          ),
+                          Container(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'D-20', 
+                                  style: TextStyle(color: Colors.grey, fontSize: 16, fontWeight: FontWeight.w600)
+                                ),
+                                Container(
+                                  width: 60,
+                                  margin: EdgeInsets.only(left: 5),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.orange),
+                                    borderRadius: BorderRadius.all(Radius.circular(30))
+                                  ),
+                                  child: Center(child: Text('OOOO', style: TextStyle(color: Colors.orange)))
+                                ),
+                                Container(
+                                  width: 60,
+                                  margin: EdgeInsets.only(left: 5),
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey,
+                                    borderRadius: BorderRadius.all(Radius.circular(30))
+                                  ),
+                                  child: Center(child: Text('OOOO', style: TextStyle(color: Colors.white)))
+                                )
+                              ]
+                            )
+                          )
+                        ]
+                      )
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('2020.12.31', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                          SizedBox(width: 10),
+                          Icon(Icons.access_time),
+                          SizedBox(width: 5),
+                          Text('17시', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                          SizedBox(width: 5),
+                          Icon(Icons.account_circle)
+                        ]
+                      )
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 10),
+                      child: Text(
+                        '전체 전시해설, 살성전시실, 전시유물, 기타/기획전', 
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: Colors.grey),
+                      ),
+                    )
+                  ]
+                )
+              )
+            ),
+          )
+        )
       ]
     );
   }
