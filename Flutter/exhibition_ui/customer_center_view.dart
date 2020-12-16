@@ -146,7 +146,7 @@ class MyWidgetState extends State<MyWidget> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0),
                         ),
-                        child: Text('1:1 문의하기', style: TextStyle(fontSize: 18, color: Colors.white)),
+                        child: Text('고객센터', style: TextStyle(fontSize: 18, color: Colors.white)),
                         onPressed: () {},
                       )
                     ]
